@@ -1,18 +1,31 @@
+import { useEffect } from "react";
+import Switch from "./Switch";
+import Logo from "./Logo";
+
 const Header = () => {
+  useEffect(() => {
+    document
+      .getElementById("handle_toggle_sidemenu")
+      .addEventListener("change", function () {
+        if (this.checked) {
+          document.querySelector(".mini_sidebar").classList.add("expanded");
+          document
+            .getElementById("content_section")
+            .classList.add("with_sidebar");
+        } else {
+          document.querySelector(".mini_sidebar").classList.remove("expanded");
+          document
+            .getElementById("content_section")
+            .classList.remove("with_sidebar");
+        }
+      });
+  }, []);
   return (
     <nav className="navbar fixed-top navbar-dark bg-secondary top_navbar py-0">
       <div className="container-fluid h-100 pe-0">
         <div className="right_content h-100 py-1 bg-dark">
-          <a className="navbar-brand h-100" href="/">
-            <img src="/assets/images/logo.png" className="h-100" />
-          </a>
-          <div className="form-check form-switch mx-4 d-none d-md-block">
-            <input
-              id="handle_toggle_sidemenu"
-              className="form-check-input pointer"
-              type="checkbox"
-            />
-          </div>
+          <Logo logoSrc="/assets/images/logo.png" />
+          <Switch />
         </div>
 
         <div className="left_content d-flex flex-row-reverse">
