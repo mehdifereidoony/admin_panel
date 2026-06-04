@@ -1,13 +1,15 @@
+import Modal from "../../components/common/Modal";
+
 const ProductCategory = () => {
   return (
     <div
       id="manage_product_category"
-      className="manage_product_category main_section d-none"
+      className="manage_product_category main_section "
     >
       <h4 className="text-center my-3">مدیریت دسته بندی محصولات</h4>
       <div className="row justify-content-between">
         <div className="col-10 col-md-6 col-lg-4">
-          <div className="input-group mb-3" style="direction: ltr;">
+          <div className="input-group mb-3" style={{ direction: "rtl" }}>
             <input
               type="text"
               className="form-control"
@@ -24,6 +26,11 @@ const ProductCategory = () => {
           >
             <i className="fas fa-plus text-light"></i>
           </button>
+          <Modal
+            id="add_product_category_modal"
+            title="مودال"
+            fullScreen={false}
+          />
         </div>
       </div>
       <table className="table table-responsive text-center table-hover table-bordered">
@@ -203,62 +210,3 @@ const ProductCategory = () => {
 };
 
 export default ProductCategory;
-
-{
-  /* <div class="modal fade" id="add_product_category_modal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-fullscreen">
-          <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title flex-fill" id="exampleModalLabel">افزودن دسته محصولات</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="container">
-                    <div class="row justify-content-center">
-                        <div class="col-12 col-md-6 col-lg-8">
-                            <div class="input-group mb-3" style="direction: ltr;">
-                                <select type="text" class="form-control">
-                                    <option value="1">بدون والد</option>
-                                    <option value="1">دسته شماره 1</option>
-                                </select>
-                                <span class="input-group-text w_6rem justify-content-center">دسته والد</span>
-                            </div>
-                        </div>
-                        <div class="col-12 col-md-6 col-lg-8">
-                            <div class="input-group mb-3" style="direction: ltr;">
-                                <input type="text" class="form-control" placeholder="عنوان دسته">
-                                <span class="input-group-text w_6rem justify-content-center">عنوان</span>
-                            </div>
-                        </div>
-                        <div class="col-12 col-md-6 col-lg-8">
-                            <div class="input-group mb-3" style="direction: ltr;">
-                                <textarea type="text" class="form-control" placeholder="توضیحات" rows="5"></textarea>
-                                <span class="input-group-text w_6rem justify-content-center">توضیحات</span>
-                            </div>
-                        </div>
-                        <div class="col-12 col-md-6 col-lg-8">
-                            <div class="input-group mb-3" style="direction: ltr;">
-                                <input type="file" class="form-control" placeholder="تصویر">
-                                <span class="input-group-text w_6rem justify-content-center">تصویر</span>
-                            </div>
-                        </div>
-                        <div class="col-12 col-md-6 col-lg-8 row justify-content-center">
-                            <div class="form-check form-switch col-5 col-md-2">
-                                <input class="form-check-input pointer" type="checkbox" id="flexSwitchCheckDefault" checked>
-                                <label class="form-check-label pointer" for="flexSwitchCheckDefault">وضعیت فعال</label>
-                            </div>
-                        </div>
-                        <div class="btn_box text-center col-12 col-md-6 col-lg-8 mt-4">
-                            <button class="btn btn-primary ">ذخیره</button>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">انصراف</button>
-            </div>
-          </div>
-        </div>
-    </div> */
-}
