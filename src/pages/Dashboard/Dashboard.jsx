@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import DataCard from "./components/DataCard";
 import ProductTable from "./components/ProductTable";
 import LineChart from "../../components/common/Chart";
