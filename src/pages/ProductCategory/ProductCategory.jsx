@@ -1,5 +1,5 @@
 import DataTable from "../../components/common/DataTable";
-import Modal from "../../components/common/Modal";
+import AddCategory from "./components/AddCategory";
 
 const data = [
   {
@@ -84,18 +84,7 @@ const ProductCategory = () => {
         itemsInPage={3}
         searchField={["title", "category"]}
       >
-        <button
-          className="btn btn-success d-flex justify-content-center align-items-center"
-          data-bs-toggle="modal"
-          data-bs-target="#add_product_category_modal"
-        >
-          <i className="fas fa-plus text-light"></i>
-        </button>
-        <Modal
-          id="add_product_category_modal"
-          title="افزودن دسته جدید"
-          fullScreen={true}
-        />
+        <AddCategory />
       </DataTable>
     </div>
   );
