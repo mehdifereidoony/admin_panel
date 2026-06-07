@@ -1,7 +1,29 @@
+import { BrowserRouter, Navigate, Route, Routes } from "react-router";
 import AdminLayout from "./layouts/AdminLayout/AdminLayout";
+import AuthLayout from "./layouts/AuthLayout/AuthLayout";
+import Login from "./pages/Auth/Login";
+import Dashboard from "./pages/Dashboard/Dashboard";
+import ProductCategory from "./pages/ProductCategory/ProductCategory";
+import Products from "./pages/Products/Products";
 
 const App = () => {
-  return <AdminLayout />;
+  return (
+    <BrowserRouter>
+      <Routes>
+        {/* Auth Router  */}
+        <Route element={<AuthLayout />}>
+          <Route path="/login" element={<Login />} />
+        </Route>
+        {/* Admin Router  */}
+        <Route element={<AdminLayout />}>
+          <Route path="/" element={<Dashboard />} />
+          <Route path="/categories" element={<ProductCategory />} />
+          <Route path="/products" element={<Products />} />
+          <Route path="/*" element={<Navigate to="/" />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
+  );
 };
 
 export default App;

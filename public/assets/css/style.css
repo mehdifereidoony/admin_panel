@@ -18,6 +18,10 @@ body {
   /* box-sizing: content-box */
 }
 
+a {
+  text-decoration: none;
+}
+
 /* scrollbars ------------------ */
 ::-webkit-scrollbar {
   width: 5px !important;
@@ -278,7 +282,16 @@ th {
   color: #3186e7 !important;
   text-shadow: 0 0 12px #077171 !important;
 }
+.sidebar_menu_item {
+  display: flex;
+}
+.sidebar_menu_item span {
+  padding: 5px;
+}
 .sidebar_menu_item.active {
+  background: rgb(85, 84, 84);
+}
+.sidebar_menu_item:hover {
   background: rgb(85, 84, 84);
 }
 

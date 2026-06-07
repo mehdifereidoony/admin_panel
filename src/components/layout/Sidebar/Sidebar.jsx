@@ -6,14 +6,18 @@ const Sidebar = () => {
   return (
     <section id="sidebar_section">
       <div className="mini_sidebar collapsedd bg-dark h-100">
-        <ul className="p-0 m-0">
+        <div className="p-0 m-0">
           <UserAvatar name={"mehdi"} imageSrc={"/assets/images/user2.jpg"} />
 
-          <MenuItem title="داشبرد" icon="fas fa-tachometer-alt" />
+          <MenuItem to="/" title="داشبرد" icon="fas fa-tachometer-alt" />
 
           <GroupTitle title="فروشگاه" />
-          <MenuItem title="مدیریت گروه محصول" icon="fas fa-stream" />
-          <MenuItem title="مدیریت محصول" icon="fas fa-cube" />
+          <MenuItem
+            to="/categories"
+            title="مدیریت گروه محصول"
+            icon="fas fa-stream"
+          />
+          <MenuItem to="/products" title="مدیریت محصول" icon="fas fa-cube" />
           <MenuItem title="مدیریت برندها" icon="fas fa-copyright" />
           <MenuItem title="مدیریت گرانتی ها" icon="fab fa-pagelines" />
           <MenuItem title="مدیریت رنگ ها" icon="fas fa-palette" />
@@ -32,7 +36,7 @@ const Sidebar = () => {
           <GroupTitle title="ارتباطات" />
           <MenuItem title="سوال ها" icon="fas fa-question-circle" />
           <MenuItem title="نظرات" icon="fas fa-comment" />
-        </ul>
+        </div>
       </div>
     </section>
   );
