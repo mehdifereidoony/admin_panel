@@ -1,8 +1,11 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { loginSchema } from "../../schema/authSchema";
+import { loginApi } from "../../services/authService";
+import { useNavigate } from "react-router";
 
 const Login = () => {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -14,7 +17,17 @@ const Login = () => {
     shouldUnregister: true,
   });
   const onSubmit = async (data) => {
-    console.log(data);
+    try {
+      const res = await loginApi(data);
+      if (res.status == 200) {
+        localStorage.setItem("login_token", res.data.token);
+        navigate("/");
+      } else {
+        alert("اطلاعات وارد شده نامعتبر است");
+      }
+    } catch {
+      alert("مشکلی پیش اومد");
+    }
   };
   return (
     <div className="container min-vh-100 d-flex justify-content-center align-items-center">
@@ -27,13 +40,13 @@ const Login = () => {
               <label className="form-label">نام کاربری</label>
 
               <input
-                {...register("identity")}
+                {...register("phone")}
                 type="text"
                 className="form-control"
                 placeholder=" نام کاربری یا ایمیل"
               />
-              {errors.identity && (
-                <p className="text-danger mt-1">{errors.identity.message}</p>
+              {errors.phone && (
+                <p className="text-danger mt-1">{errors.phone.message}</p>
               )}
             </div>
 

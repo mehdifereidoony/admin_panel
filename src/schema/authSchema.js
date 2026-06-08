@@ -1,7 +1,7 @@
 import z from "zod";
 
 export const loginSchema = z.object({
-  identity: z
+  phone: z
     .string()
     .trim()
     .min(1, "این فیلد اجباری هست")
