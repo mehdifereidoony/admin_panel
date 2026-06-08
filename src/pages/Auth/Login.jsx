@@ -3,8 +3,10 @@ import { useForm } from "react-hook-form";
 import { loginSchema } from "../../schema/authSchema";
 import { loginApi } from "../../services/authService";
 import { useNavigate } from "react-router";
+import { useNotification } from "../../context/notificationContext";
 
 const Login = () => {
+  const addNotification = useNotification();
   const navigate = useNavigate();
   const {
     register,
@@ -23,10 +25,10 @@ const Login = () => {
         localStorage.setItem("login_token", res.data.token);
         navigate("/");
       } else {
-        alert("اطلاعات وارد شده نامعتبر است");
+        addNotification("اطلاعات وارد شده نامعتبر است", "error");
       }
     } catch {
-      alert("مشکلی پیش اومد");
+      addNotification("مشکلی پیش آمده", "error");
     }
   };
   return (
