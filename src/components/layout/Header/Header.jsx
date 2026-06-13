@@ -1,8 +1,11 @@
 import { useEffect } from "react";
 import Switch from "./Switch";
 import Logo from "./Logo";
+import { useNavigate } from "react-router";
+import { removeToken } from "../../../utils/authToken";
 
 const Header = () => {
+  const navigate = useNavigate()
   useEffect(() => {
     document
       .getElementById("handle_toggle_sidemenu")
@@ -20,6 +23,12 @@ const Header = () => {
         }
       });
   }, []);
+  const handleLogout = ()=>{
+    
+    removeToken();
+    navigate("/login")
+
+}
   return (
     <nav className="navbar fixed-top navbar-dark bg-secondary top_navbar py-0">
       <div className="container-fluid h-100 pe-0">
@@ -63,9 +72,9 @@ const Header = () => {
             <hr />
             <li className="d-flex justify-content-center align-items-center px-2">
               <i className="fas fa-power-off"></i>
-              <a className="dropdown-item" href="#">
+              <button onClick={handleLogout} className="dropdown-item" href="#">
                 خروج
-              </a>
+              </button>
             </li>
           </ul>
           <i className="far fa-bell fa-2x mx-3 pointer position-relative">
