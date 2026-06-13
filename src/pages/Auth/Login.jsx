@@ -4,6 +4,7 @@ import { loginSchema } from "../../schema/authSchema";
 import { loginApi } from "../../services/authService";
 import { useNavigate } from "react-router";
 import { useNotification } from "../../context/notificationContext";
+import { setToken } from "../../utils/authToken";
 
 const Login = () => {
   const addNotification = useNotification();
@@ -22,7 +23,7 @@ const Login = () => {
     try {
       const res = await loginApi(data);
       if (res.status == 200) {
-        localStorage.setItem("login_token", res.data.token);
+        setToken(res.data.token)
         navigate("/");
       } else {
         addNotification("اطلاعات وارد شده نامعتبر است", "error");
