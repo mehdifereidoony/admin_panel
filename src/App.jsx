@@ -8,6 +8,7 @@ import Products from "./pages/Products/Products";
 import NotificationProvider from "./context/notificationContext";
 import LoginRoute from "./components/common/LoginRoute";
 import ProtectedRoute from "./components/common/ProtectedRoute";
+import ChildCategories from "./pages/ProductCategory/components/ChildCategories";
 
 const App = () => {
   return (
@@ -17,16 +18,18 @@ const App = () => {
           {/* Auth Router  */}
           <Route element={<LoginRoute />}>
             <Route element={<AuthLayout />}>
-            <Route path="/login" element={<Login />} />
-          </Route>
+              <Route path="/login" element={<Login />} />
+            </Route>
           </Route>
           {/* Admin Router  */}
           <Route element={<ProtectedRoute />}>
             <Route element={<AdminLayout />}>
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/categories" element={<ProductCategory />} />
-            <Route path="/products" element={<Products />} />
-          </Route>
+              <Route path="/" element={<Dashboard />} />
+              <Route path="/categories" element={<ProductCategory />}>
+                <Route path=":parentId" element={<ChildCategories />} />
+              </Route>
+              <Route path="/products" element={<Products />} />
+            </Route>
           </Route>
           <Route path="/*" element={<Navigate to="/" />} />
         </Routes>

@@ -56,26 +56,34 @@ const DataTable = ({
         </div>
       </div>
       {/* table  */}
-      <table className="table table-responsive text-center table-hover table-bordered">
-        <thead className="table-secondary">
-          <tr>
-            {itemsInTable.map((i) => (
-              <th key={i.field}>{i.title}</th>
-            ))}
-            {additionalColumn && <th>{additionalColumn.title}</th>}
-          </tr>
-        </thead>
-        <tbody>
-          {items.map((d) => (
-            <tr key={d.id}>
+      {items.length ? (
+        <table className="table table-responsive text-center table-hover table-bordered">
+          <thead className="table-secondary">
+            <tr>
               {itemsInTable.map((i) => (
-                <td key={i.field + "-" + d.id}>{d[i.field]}</td>
+                <th key={i.field}>{i.title}</th>
               ))}
-              {additionalColumn && <td>{additionalColumn.value(d.id)}</td>}
+              {additionalColumn.map((a) => (
+                <th key={a.title}>{a.title}</th>
+              ))}
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {items.map((d) => (
+              <tr key={d.id}>
+                {itemsInTable.map((i) => (
+                  <td key={i.field + "-" + d.id}>{d[i.field]}</td>
+                ))}
+                {additionalColumn.map((a) => (
+                  <td key={a.title}>{a.value(d)}</td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      ) : (
+        <h5 className="text-danger text-center">...</h5>
+      )}
       {/* page navigation  */}
       {pages.length > 1 ? (
         <nav

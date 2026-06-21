@@ -1,87 +1,59 @@
+import { useEffect, useState } from "react";
 import DataTable from "../../components/common/DataTable";
 import AddCategory from "./components/AddCategory";
+import { getCategories } from "../../services/categoryService";
+import { useNotification } from "../../context/notificationContext";
+import ShowInMenu from "./components/ShowInMenu";
+import Actions from "./components/Actions";
+import IsActive from "./components/IsActive";
+import { Outlet, useLocation, useParams } from "react-router";
+import { formatDate } from "../../utils/formatDate";
 
-const data = [
-  {
-    id: 1,
-    title: "aaa",
-    category: "bbb",
-    status: "test",
-  },
-  {
-    id: 2,
-    title: "bbb",
-    category: "bbb",
-    status: "test",
-  },
-  {
-    id: 3,
-    title: "ccc",
-    category: "bbb",
-    status: "test",
-  },
-  {
-    id: 4,
-    title: "ddd",
-    category: "bbb",
-    status: "test",
-  },
-];
 const itemsInTable = [
   { field: "id", title: "#" },
-  { field: "category", title: "دسته" },
   { field: "title", title: "نام" },
-  { field: "status", title: "وضعیت" },
+  { field: "parent_id", title: "دسته مادر" },
 ];
 
-const actionsTable = (id) => (
-  <>
-    <i
-      id={id}
-      className="fas fa-project-diagram text-info mx-1 hoverable_text pointer has_tooltip"
-      title="زیرمجموعه"
-      data-bs-toggle="tooltip"
-      data-bs-placement="top"
-    ></i>
-    <i
-      id={id}
-      className="fas fa-edit text-warning mx-1 hoverable_text pointer has_tooltip"
-      title="ویرایش دسته"
-      data-bs-toggle="modal"
-      data-bs-placement="top"
-      data-bs-target="#add_product_category_modal"
-    ></i>
-    <i
-      id={id}
-      className="fas fa-plus text-success mx-1 hoverable_text pointer has_tooltip"
-      title="افزودن ویژگی"
-      data-bs-toggle="modal"
-      data-bs-target="#add_product_category_attr_modal"
-    ></i>
-    <i
-      id={id}
-      className="fas fa-times text-danger mx-1 hoverable_text pointer has_tooltip"
-      title="حذف دسته"
-      data-bs-toggle="tooltip"
-      data-bs-placement="top"
-    ></i>
-  </>
-);
-
-const additionalColumn = { title: "عملیات", value: (id) => actionsTable(id) };
+const additionalColumn = [
+  { title: "تاریخ", value: (data) => formatDate(data.created_at) },
+  { title: "نمایش در منو", value: (data) => <ShowInMenu data={data} /> },
+  { title: "فعال", value: (data) => <IsActive data={data} /> },
+  { title: "عملیات", value: (data) => <Actions data={data} /> },
+];
 
 const ProductCategory = () => {
+  const addNotification = useNotification();
+  const params = useParams();
+  const location = useLocation();
+  const [data, setData] = useState([]);
+  useEffect(() => {
+    const getCategoriesData = async () => {
+      try {
+        const res = await getCategories(params.parentId);
+        if (res.status == 200) {
+          setData(res.data.data);
+          return;
+        }
+        addNotification("error", res.message);
+      } catch {
+        addNotification("error", "مشکلی از سمت سرور رخ داد");
+      }
+    };
+    getCategoriesData();
+  }, [params, location]);
   return (
     <div
       id="manage_product_category"
       className="manage_product_category main_section "
     >
       <h4 className="text-center my-3">مدیریت دسته بندی محصولات</h4>
+      <Outlet />
       <DataTable
         data={data}
         itemsInTable={itemsInTable}
         additionalColumn={additionalColumn}
-        itemsInPage={3}
+        itemsInPage={12}
         searchField={["title", "category"]}
       >
         <AddCategory />
