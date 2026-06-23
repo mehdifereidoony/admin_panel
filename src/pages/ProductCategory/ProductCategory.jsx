@@ -27,6 +27,7 @@ const ProductCategory = () => {
   const params = useParams();
   const location = useLocation();
   const [data, setData] = useState([]);
+  const [refresh, setRefresh] = useState(false);
   useEffect(() => {
     const getCategoriesData = async () => {
       try {
@@ -41,7 +42,7 @@ const ProductCategory = () => {
       }
     };
     getCategoriesData();
-  }, [params, location]);
+  }, [params, location, refresh]);
   return (
     <div
       id="manage_product_category"
@@ -56,7 +57,7 @@ const ProductCategory = () => {
         itemsInPage={12}
         searchField={["title", "category"]}
       >
-        <AddCategory />
+        <AddCategory setRefresh={setRefresh} />
       </DataTable>
     </div>
   );

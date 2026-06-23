@@ -5,9 +5,14 @@ import SubmitButton from "../../../components/forrms/SubmitButton";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { categoriesSchema } from "../../../schema/CategoriesSchema";
 import { useEffect, useState } from "react";
-import { getCategories } from "../../../services/categoryService";
+import {
+  addCategoriesService,
+  getCategories,
+} from "../../../services/categoryService";
+import { useNotification } from "../../../context/notificationContext";
 
-const AddCategory = () => {
+const AddCategory = ({ setRefresh }) => {
+  const addNotification = useNotification();
   const {
     register,
     handleSubmit,
@@ -19,9 +24,23 @@ const AddCategory = () => {
     shouldFocusError: true,
     shouldUnregister: true,
   });
-  const onSubmit = (data) => {
-    console.log(data);
-    reset();
+  const onSubmit = async (data) => {
+    try {
+      const res = await addCategoriesService({
+        ...data,
+        show_in_menu: data.show_in_menu ? 1 : 0,
+        is_active: data.is_active ? 1 : 0,
+      });
+      if (res.status == 201) {
+        addNotification("success", "دسته با موفقیت ثبت شد");
+        reset();
+        setRefresh((prev) => !prev);
+      } else {
+        addNotification("error", res.data.title || "خطایی رخ داده");
+      }
+    } catch {
+      addNotification("error", "مشکلی از سمت سرور رخ داد");
+    }
   };
   const [parent_categories, setParent_categories] = useState([]);
   useEffect(() => {
