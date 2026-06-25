@@ -1,6 +1,6 @@
 import { api } from "./axiosInstance";
 
-export const getCategories = (categoryParent = null) => {
+export const getCategoriesService = (categoryParent = null) => {
   return api.get(
     `/admin/categories${categoryParent ? `?parent=${categoryParent}` : ""}`
   );

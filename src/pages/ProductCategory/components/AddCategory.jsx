@@ -7,12 +7,15 @@ import { categoriesSchema } from "../../../schema/CategoriesSchema";
 import { useEffect, useState } from "react";
 import {
   addCategoriesService,
-  getCategories,
+  getCategoriesService,
 } from "../../../services/categoryService";
 import { useNotification } from "../../../context/notificationContext";
+import { useParams } from "react-router";
 
 const AddCategory = ({ setRefresh }) => {
   const addNotification = useNotification();
+  const params = useParams();
+  const [parent_categories, setParent_categories] = useState([]);
   const {
     register,
     handleSubmit,
@@ -42,10 +45,20 @@ const AddCategory = ({ setRefresh }) => {
       addNotification("error", "مشکلی از سمت سرور رخ داد");
     }
   };
-  const [parent_categories, setParent_categories] = useState([]);
+  const setParent = async () => {
+    reset({ parent_id: params.parentId });
+  };
+  useEffect(() => {
+    if (params.parentId && parent_categories.length > 0) {
+      setParent();
+    } else {
+      reset({ parent_id: "" });
+    }
+  }, [params.parentId, parent_categories]);
+
   useEffect(() => {
     const getParentCat = async () => {
-      const res = await getCategories();
+      const res = await getCategoriesService();
       if (res.status == 200) {
         const items = res.data.data;
         setParent_categories(

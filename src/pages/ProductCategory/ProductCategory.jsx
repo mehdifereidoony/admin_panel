@@ -1,14 +1,13 @@
 import { useEffect, useState } from "react";
 import DataTable from "../../components/common/DataTable";
 import AddCategory from "./components/AddCategory";
-import { getCategories } from "../../services/categoryService";
+import { getCategoriesService } from "../../services/categoryService";
 import { useNotification } from "../../context/notificationContext";
 import ShowInMenu from "./components/ShowInMenu";
 import Actions from "./components/Actions";
 import IsActive from "./components/IsActive";
 import { Outlet, useLocation, useParams } from "react-router";
 import { formatDate } from "../../utils/formatDate";
-import Spinner from "../../components/ui/Spinner";
 
 const itemsInTable = [
   { field: "id", title: "#" },
@@ -34,7 +33,7 @@ const ProductCategory = () => {
     const getCategoriesData = async () => {
       setIsLoading(true);
       try {
-        const res = await getCategories(params.parentId);
+        const res = await getCategoriesService(params.parentId);
         if (res.status == 200) {
           setData(res.data.data);
           return;
