@@ -6,6 +6,10 @@ export const getCategoriesService = (categoryParent = null) => {
   );
 };
 
+export const getCategoryService = (id) => {
+  return api.get(`/admin/categories/${id}`);
+};
+
 export const addCategoriesService = (data) => {
   if (data.image) {
     const formData = new FormData();
@@ -22,4 +26,8 @@ export const addCategoriesService = (data) => {
     data = formData;
   }
   return api.post("/admin/categories", data);
+};
+
+export const editCategoryService = (id, data) => {
+  return api.put(`/admin/categories/${id}`, data);
 };

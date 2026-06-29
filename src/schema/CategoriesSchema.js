@@ -7,7 +7,7 @@ export const categoriesSchema = z.object({
   image: z
     .any()
     .refine(
-      (file) => !file.length || file[0]?.size <= 2 * 1024 * 1024,
+      (file) => !file || !file.length || file[0]?.size <= 2 * 1024 * 1024,
       "حجم تصویر نباید بیشتر از 2 مگابایت باشد"
     ),
   is_active: z.boolean().default(false),

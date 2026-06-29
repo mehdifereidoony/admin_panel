@@ -1,7 +1,9 @@
 import { useNavigate } from "react-router";
+import { useCategories } from "../../../context/categoriesContext";
 
 const Actions = ({ data }) => {
   const navigate = useNavigate();
+  const { setEdited } = useCategories();
   return (
     <>
       <i
@@ -18,6 +20,7 @@ const Actions = ({ data }) => {
         data-bs-placement="top"
       ></i>
       <i
+        onClick={() => setEdited(data)}
         id={data.id}
         className="fas fa-edit text-warning mx-1 hoverable_text pointer has_tooltip"
         title="ویرایش دسته"

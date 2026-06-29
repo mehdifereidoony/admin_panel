@@ -7,15 +7,18 @@ import { categoriesSchema } from "../../../schema/CategoriesSchema";
 import { useEffect, useState } from "react";
 import {
   addCategoriesService,
+  editCategoryService,
   getCategoriesService,
 } from "../../../services/categoryService";
 import { useNotification } from "../../../context/notificationContext";
 import { useParams } from "react-router";
+import { useCategories } from "../../../context/categoriesContext";
 
 const AddCategory = ({ setRefresh }) => {
   const addNotification = useNotification();
   const params = useParams();
   const [parent_categories, setParent_categories] = useState([]);
+  const { edited, setEdited } = useCategories();
   const {
     register,
     handleSubmit,
@@ -29,32 +32,66 @@ const AddCategory = ({ setRefresh }) => {
   });
   const onSubmit = async (data) => {
     try {
-      const res = await addCategoriesService({
-        ...data,
-        show_in_menu: data.show_in_menu ? 1 : 0,
-        is_active: data.is_active ? 1 : 0,
-      });
-      if (res.status == 201) {
-        addNotification("success", "دسته با موفقیت ثبت شد");
+      let res;
+      if (!edited) {
+        res = await addCategoriesService({
+          ...data,
+          show_in_menu: data.show_in_menu ? 1 : 0,
+          is_active: data.is_active ? 1 : 0,
+        });
+      } else {
+        const { image, ...body } = data;
+        res = await editCategoryService(edited.id, {
+          ...body,
+          show_in_menu: data.show_in_menu ? 1 : 0,
+          is_active: data.is_active ? 1 : 0,
+        });
+      }
+      if (res.status == 201 || res.status == 200) {
+        addNotification(
+          "success",
+          `${edited ? "دسته با موفقیت ویرایش شد" : "دسته با موفقیت ثبت شد"}`
+        );
         reset();
         setRefresh((prev) => !prev);
       } else {
         addNotification("error", res.data.title || "خطایی رخ داده");
       }
-    } catch {
+    } catch (error) {
+      console.log(error);
       addNotification("error", "مشکلی از سمت سرور رخ داد");
     }
   };
   const setParent = async () => {
-    reset({ parent_id: params.parentId });
+    reset({
+      title: "",
+      parent_id: params.parentId,
+      descriptions: "",
+      is_active: false,
+      show_in_menu: false,
+    });
   };
   useEffect(() => {
-    if (params.parentId && parent_categories.length > 0) {
+    if (edited && parent_categories.length > 0) {
+      reset({
+        title: edited.title,
+        parent_id: edited.parent_id,
+        descriptions: edited.descriptions ?? "",
+        is_active: edited.is_active ? true : false,
+        show_in_menu: edited.show_in_menu ? true : false,
+      });
+    } else if (!edited && params.parentId && parent_categories.length > 0) {
       setParent();
-    } else {
-      reset({ parent_id: "" });
+    } else if (!edited && !params.parentId) {
+      reset({
+        title: "",
+        parent_id: "",
+        descriptions: "",
+        is_active: false,
+        show_in_menu: false,
+      });
     }
-  }, [params.parentId, parent_categories]);
+  }, [params.parentId, parent_categories, edited]);
 
   useEffect(() => {
     const getParentCat = async () => {
@@ -70,9 +107,11 @@ const AddCategory = ({ setRefresh }) => {
     };
     getParentCat();
   }, []);
+
   return (
     <>
       <button
+        onClick={() => setEdited(null)}
         className="btn btn-success d-flex justify-content-center align-items-center"
         data-bs-toggle="modal"
         data-bs-target="#add_product_category_modal"
@@ -81,7 +120,7 @@ const AddCategory = ({ setRefresh }) => {
       </button>
       <Modal
         id="add_product_category_modal"
-        title="افزودن دسته جدید"
+        title={edited ? "ویرایش دسته" : "افزودن دسته"}
         fullScreen={true}
       >
         <div className="container">

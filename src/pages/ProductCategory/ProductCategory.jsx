@@ -8,6 +8,7 @@ import Actions from "./components/Actions";
 import IsActive from "./components/IsActive";
 import { Outlet, useLocation, useParams } from "react-router";
 import { formatDate } from "../../utils/formatDate";
+import CategoriesProvider from "../../context/categoriesContext";
 
 const itemsInTable = [
   { field: "id", title: "#" },
@@ -48,23 +49,24 @@ const ProductCategory = () => {
     getCategoriesData();
   }, [params, location, refresh]);
   return (
-    <div
-      id="manage_product_category"
-      className="manage_product_category main_section "
-    >
-      <h4 className="text-center my-3">مدیریت دسته بندی محصولات</h4>
-      <Outlet />
-      <DataTable
-        data={data}
-        itemsInTable={itemsInTable}
-        additionalColumn={additionalColumn}
-        itemsInPage={12}
-        searchField={["title", "category"]}
-        isLoading={isLoading}
+    <CategoriesProvider>
+      <div
+        id="manage_product_category"
+        className="manage_product_category main_section "
       >
+        <h4 className="text-center my-3">مدیریت دسته بندی محصولات</h4>
+        <Outlet />
         <AddCategory setRefresh={setRefresh} />
-      </DataTable>
-    </div>
+        <DataTable
+          data={data}
+          itemsInTable={itemsInTable}
+          additionalColumn={additionalColumn}
+          itemsInPage={12}
+          searchField={["title", "category"]}
+          isLoading={isLoading}
+        ></DataTable>
+      </div>
+    </CategoriesProvider>
   );
 };
 
