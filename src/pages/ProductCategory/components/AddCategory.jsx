@@ -52,7 +52,11 @@ const AddCategory = ({ setRefresh }) => {
           "success",
           `${edited ? "دسته با موفقیت ویرایش شد" : "دسته با موفقیت ثبت شد"}`
         );
-        reset();
+        if (edited) {
+          reset({});
+        } else {
+          reset();
+        }
         setRefresh((prev) => !prev);
       } else {
         addNotification("error", res.data.title || "خطایی رخ داده");
