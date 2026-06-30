@@ -43,6 +43,7 @@ const AddCategory = ({ setRefresh }) => {
         const { image, ...body } = data;
         res = await editCategoryService(edited.id, {
           ...body,
+          parent_id: data.parent_id || null,
           show_in_menu: data.show_in_menu ? 1 : 0,
           is_active: data.is_active ? 1 : 0,
         });
@@ -52,9 +53,7 @@ const AddCategory = ({ setRefresh }) => {
           "success",
           `${edited ? "دسته با موفقیت ویرایش شد" : "دسته با موفقیت ثبت شد"}`
         );
-        if (edited) {
-          reset({});
-        } else {
+        if (!edited) {
           reset();
         }
         setRefresh((prev) => !prev);

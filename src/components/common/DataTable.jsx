@@ -35,16 +35,9 @@ const DataTable = ({
     setCurrentPage(1);
   }, [filteredData]);
 
-  if (isLoading)
-    return (
-      <div className="d-flex justify-content-center align-items-center vh-100">
-        <Spinner className="text-primary" />
-      </div>
-    );
-  else if (items.length)
-    return (
-      <>
-        {/* top box  */}
+  return (
+    <>
+            {/* top box  */}
         <div className="row justify-content-between">
           {/* search  */}
           <div className="col-10 col-md-6 col-lg-4">
@@ -64,8 +57,13 @@ const DataTable = ({
             {children}
           </div>
         </div>
-        {/* table  */}
-
+        {isLoading? (
+          <div className="d-flex justify-content-center align-items-center vh-100">
+        <Spinner className="text-primary" />
+      </div>
+        ) :items.length? (
+          <>
+                  {/* table  */}
         <table className="table table-responsive text-center table-hover table-bordered">
           <thead className="table-secondary">
             <tr>
@@ -139,8 +137,10 @@ const DataTable = ({
             </ul>
           </nav>
         ) : null}
-      </>
-    );
-  else return <h5 className="text-danger text-center">هیچ موردی یافت نشد</h5>;
+          </>
+        ) :(<h5 className="text-danger text-center">هیچ موردی یافت نشد</h5>)}
+    </>
+  )
+
 };
 export default DataTable;

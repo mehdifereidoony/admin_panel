@@ -31,3 +31,8 @@ export const addCategoriesService = (data) => {
 export const editCategoryService = (id, data) => {
   return api.put(`/admin/categories/${id}`, data);
 };
+
+
+export const deleteCategoryService = (id)=>{
+  return api.delete(`/admin/categories/${id}`);
+}

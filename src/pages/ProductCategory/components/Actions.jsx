@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router";
 import { useCategories } from "../../../context/categoriesContext";
 
-const Actions = ({ data }) => {
+const Actions = ({ data, deleteCategory }) => {
   const navigate = useNavigate();
   const { setEdited } = useCategories();
   return (
@@ -36,7 +36,7 @@ const Actions = ({ data }) => {
         data-bs-target="#add_product_category_attr_modal"
       ></i>
       <i
-        id={data.id}
+        onClick={()=> deleteCategory(data)}
         className="fas fa-times text-danger mx-1 hoverable_text pointer has_tooltip"
         title="حذف دسته"
         data-bs-toggle="tooltip"
