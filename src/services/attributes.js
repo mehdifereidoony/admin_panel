@@ -1,0 +1,9 @@
+import { api } from "./axiosInstance";
+
+export const getAttributesService = (id) => {
+  return api.get(`/admin/categories/${id}/attributes`);
+};
+
+export const createAttributesService = (id, data) => {
+  return api.post(`/admin/categories/${id}/attributes`, data);
+};

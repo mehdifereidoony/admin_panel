@@ -1,7 +1,10 @@
-import { cache, useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import DataTable from "../../components/common/DataTable";
 import AddCategory from "./components/AddCategory";
-import { deleteCategoryService, getCategoriesService } from "../../services/categoryService";
+import {
+  deleteCategoryService,
+  getCategoriesService,
+} from "../../services/categoryService";
 import { useNotification } from "../../context/notificationContext";
 import ShowInMenu from "./components/ShowInMenu";
 import Actions from "./components/Actions";
@@ -15,7 +18,6 @@ const itemsInTable = [
   { field: "title", title: "نام" },
   { field: "parent_id", title: "دسته مادر" },
 ];
-
 
 const ProductCategory = () => {
   const addNotification = useNotification();
@@ -41,31 +43,36 @@ const ProductCategory = () => {
       }
     };
     getCategoriesData();
-    }, [params, location, refresh]);
-    const deleteCategory = useCallback(async(item)=>{
-      if(confirm(`آیا از حذف ${item.title} مطمعن هیتید؟`)){
-        try{
-          const res = await deleteCategoryService(item.id);
-          if(res.status == 200){
-            addNotification("success" , "دسته با موفقیت حذف شد" );
-            setData(prev=> prev.filter((d)=>{
-              console.log(d.id , item.id)
-              return d.id !== item.id
-            }));
-          }else{
-            addNotification("error", "خطایی رخ داده");
-          }
-        }catch{
+  }, [params, location, refresh]);
+  const deleteCategory = useCallback(async (item) => {
+    if (confirm(`آیا از حذف ${item.title} مطمعن هیتید؟`)) {
+      try {
+        const res = await deleteCategoryService(item.id);
+        if (res.status == 200) {
+          addNotification("success", "دسته با موفقیت حذف شد");
+          setData((prev) =>
+            prev.filter((d) => {
+              console.log(d.id, item.id);
+              return d.id !== item.id;
+            })
+          );
+        } else {
           addNotification("error", "خطایی رخ داده");
         }
+      } catch {
+        addNotification("error", "خطایی رخ داده");
       }
-    },[])
-    const additionalColumn = useMemo(()=> [
-  { title: "تاریخ", value: (data) => formatDate(data.created_at) },
-  { title: "نمایش در منو", value: (data) => <ShowInMenu data={data} /> },
-  { title: "فعال", value: (data) => <IsActive data={data} /> },
-  { title: "عملیات", value: (data) => <Actions data={data} deleteCategory={deleteCategory} /> },
-]);
+    }
+  }, []);
+  const additionalColumn = useMemo(() => [
+    { title: "تاریخ", value: (data) => formatDate(data.created_at) },
+    { title: "نمایش در منو", value: (data) => <ShowInMenu data={data} /> },
+    { title: "فعال", value: (data) => <IsActive data={data} /> },
+    {
+      title: "عملیات",
+      value: (data) => <Actions data={data} deleteCategory={deleteCategory} />,
+    },
+  ]);
   return (
     <CategoriesProvider>
       <div

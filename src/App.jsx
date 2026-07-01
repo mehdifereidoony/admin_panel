@@ -9,6 +9,7 @@ import NotificationProvider from "./context/notificationContext";
 import LoginRoute from "./components/common/LoginRoute";
 import ProtectedRoute from "./components/common/ProtectedRoute";
 import ChildCategories from "./pages/ProductCategory/components/ChildCategories";
+import Attributes from "./pages/ProductCategory/attributes/Attributes";
 
 const App = () => {
   return (
@@ -28,6 +29,10 @@ const App = () => {
               <Route path="/categories" element={<ProductCategory />}>
                 <Route path=":parentId" element={<ChildCategories />} />
               </Route>
+              <Route
+                path="/categories/:categoryId/attributes"
+                element={<Attributes />}
+              />
               <Route path="/products" element={<Products />} />
             </Route>
           </Route>
