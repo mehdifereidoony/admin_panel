@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useLocation } from "react-router";
 import {
   createAttributesService,
+  editAttributesService,
   getAttributesService,
 } from "../../../services/attributes";
 import { useNotification } from "../../../context/notificationContext";
@@ -20,6 +21,7 @@ const Attributes = () => {
   const addNotification = useNotification();
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [edited, setEdited] = useState(null);
   const itemsInTable = [
     { field: "id", title: "#" },
     { field: "title", title: "نام" },
@@ -32,7 +34,9 @@ const Attributes = () => {
     },
     {
       title: "عملیات",
-      value: (data) => <Actions data={data} />,
+      value: (data) => (
+        <Actions data={data} edited={edited} setEdited={setEdited} />
+      ),
     },
   ];
   useEffect(() => {
@@ -65,12 +69,20 @@ const Attributes = () => {
     shouldUnregister: true,
   });
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (formData) => {
     try {
-      const res = await createAttributesService(location.state.parentData.id, {
-        ...data,
-        in_filter: data.in_filter ? 1 : 0,
-      });
+      let res;
+      if (!edited) {
+        res = await createAttributesService(location.state.parentData.id, {
+          ...formData,
+          in_filter: formData.in_filter ? 1 : 0,
+        });
+      } else {
+        res = await editAttributesService(edited.id, {
+          ...formData,
+          in_filter: formData.in_filter ? 1 : 0,
+        });
+      }
       if (res.status == 201) {
         addNotification("success", "ویژگی با موفقیت اضاف شد");
         setData((oldData) => [
@@ -82,19 +94,48 @@ const Attributes = () => {
             in_filter: res.data.data.in_filter ? true : false,
           },
         ]);
+        reset();
+      } else if (res.status == 200) {
+        addNotification("success", "ویژگی با موفقیت ویرایش شد");
         console.log(data);
+        const index = data.findIndex((d) => {
+          return d.id === edited.id;
+        });
+        setData((oldData) => {
+          const newData = [...oldData];
+          newData[index] = res.data.data;
+          return newData;
+        });
+        setEdited(null);
+        console.log(index);
       } else {
+        console.log(res);
         addNotification("error", res.data.title || "مشکلی پیش آمده");
       }
-    } catch {
+    } catch (error) {
+      console.log(error);
       addNotification("error", "مشکلی پیش  آمده");
     }
-    reset();
   };
+  useEffect(() => {
+    if (edited) {
+      reset({
+        title: edited.title,
+        unit: edited.unit,
+        in_filter: edited.in_filter ? true : false,
+      });
+    } else {
+      reset({
+        title: "",
+        unit: "",
+        in_filter: false,
+      });
+    }
+  }, [edited]);
   return (
     <div className="container">
       <div className="row justify-content-center">
-        <div className="row my-3">
+        <div className={`row my-3 add-edit-attr ${edited ? "bg-active" : ""}`}>
           <form onSubmit={handleSubmit(onSubmit)}>
             <FormController
               control="input"
@@ -128,6 +169,13 @@ const Attributes = () => {
                 isSubmitting={isSubmitting}
                 title="ذخیره"
               />
+              <button
+                onClick={() => setEdited(null)}
+                type="button"
+                className="btn btn-secondary "
+              >
+                انصراف
+              </button>
             </div>
           </form>
         </div>

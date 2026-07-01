@@ -1,13 +1,10 @@
-const Actions = ({ data }) => {
+const Actions = ({ data, edited, setEdited }) => {
   return (
-    <>
+    <div className={`${edited && edited.id === data.id ? "bg-active" : ""}`}>
       <i
-        onClick={() => console.log(data.id)}
+        onClick={() => setEdited(data)}
         className="fas fa-edit text-warning mx-1 hoverable_text pointer has_tooltip"
         title="ویرایش دسته"
-        data-bs-toggle="modal"
-        data-bs-placement="top"
-        data-bs-target="#add_product_category_modal"
       ></i>
       <i
         onClick={() => console.log(data.id)}
@@ -16,7 +13,7 @@ const Actions = ({ data }) => {
         data-bs-toggle="tooltip"
         data-bs-placement="top"
       ></i>
-    </>
+    </div>
   );
 };
 export default Actions;

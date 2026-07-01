@@ -7,3 +7,7 @@ export const getAttributesService = (id) => {
 export const createAttributesService = (id, data) => {
   return api.post(`/admin/categories/${id}/attributes`, data);
 };
+
+export const editAttributesService = (id, data) => {
+  return api.put(`/admin/categories/attributes/${id}`, data);
+};
