@@ -23,13 +23,13 @@ const Login = () => {
     try {
       const res = await loginApi(data);
       if (res.status == 200) {
-        setToken(res.data.token)
+        setToken(res.data.token);
         navigate("/");
       } else {
-        addNotification("اطلاعات وارد شده نامعتبر است", "error");
+        addNotification("error", "اطلاعات وارد شده نامعتبر است");
       }
     } catch {
-      addNotification("مشکلی پیش آمده", "error");
+      addNotification("error", "مشکلی پیش آمده");
     }
   };
   return (
