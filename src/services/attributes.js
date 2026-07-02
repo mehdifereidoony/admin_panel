@@ -11,3 +11,7 @@ export const createAttributesService = (id, data) => {
 export const editAttributesService = (id, data) => {
   return api.put(`/admin/categories/attributes/${id}`, data);
 };
+
+export const deleteAttributesService = (id) => {
+  return api.delete(`/admin/categories/attributes/${id}`);
+};

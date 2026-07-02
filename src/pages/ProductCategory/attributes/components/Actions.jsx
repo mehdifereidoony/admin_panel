@@ -1,4 +1,4 @@
-const Actions = ({ data, edited, setEdited }) => {
+const Actions = ({ data, edited, setEdited, deleteAttribute }) => {
   return (
     <div className={`${edited && edited.id === data.id ? "bg-active" : ""}`}>
       <i
@@ -7,7 +7,7 @@ const Actions = ({ data, edited, setEdited }) => {
         title="ویرایش دسته"
       ></i>
       <i
-        onClick={() => console.log(data.id)}
+        onClick={() => deleteAttribute(data)}
         className="fas fa-times text-danger mx-1 hoverable_text pointer has_tooltip"
         title="حذف دسته"
         data-bs-toggle="tooltip"

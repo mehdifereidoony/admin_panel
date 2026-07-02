@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useLocation } from "react-router";
 import {
   createAttributesService,
+  deleteAttributesService,
   editAttributesService,
   getAttributesService,
 } from "../../../services/attributes";
@@ -35,7 +36,7 @@ const Attributes = () => {
     {
       title: "عملیات",
       value: (data) => (
-        <Actions data={data} edited={edited} setEdited={setEdited} />
+        <Actions data={data} edited={edited} setEdited={setEdited} deleteAttribute={deleteAttribute} />
       ),
     },
   ];
@@ -115,6 +116,21 @@ const Attributes = () => {
     } catch (error) {
       console.log(error);
       addNotification("error", "مشکلی پیش  آمده");
+    }
+  };
+  const deleteAttribute = async (rowData) => {
+    if (confirm(`آیا از  حذف ${rowData.title} مظمعن هستید؟`)) {
+      try {
+        const res = await deleteAttributesService(rowData.id);
+        if (res.status == 200) {
+          addNotification("success", "ویژگی با موفقیت حذف شد");
+          setData((oldData) => [...oldData].filter((d) => d.id !== rowData.id));
+        } else {
+          addNotification("error", "خطایی وجود دارد");
+        }
+      } catch {
+        addNotification("error", "خطایی رخ داده");
+      }
     }
   };
   useEffect(() => {
