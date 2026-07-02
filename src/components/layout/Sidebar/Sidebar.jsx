@@ -18,7 +18,11 @@ const Sidebar = () => {
             icon="fas fa-stream"
           />
           <MenuItem to="/products" title="مدیریت محصول" icon="fas fa-cube" />
-          <MenuItem title="مدیریت برندها" icon="fas fa-copyright" />
+          <MenuItem
+            to="/brands"
+            title="مدیریت برندها"
+            icon="fas fa-copyright"
+          />
           <MenuItem title="مدیریت گرانتی ها" icon="fab fa-pagelines" />
           <MenuItem title="مدیریت رنگ ها" icon="fas fa-palette" />
           <MenuItem title="مدیریت تخفیف ها" icon="fas fa-percentage" />
