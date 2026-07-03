@@ -4,8 +4,9 @@ export const brandsSchema = z.object({
   original_name: z
     .string()
     .trim()
-    .min(2, "حداقل دو کاکتر")
-    .max(50, "حداکثر 50 کاکتر"),
+    .min(2, "حداقل دو کاراکتر")
+    .max(50, "حداکثر 50 کاراکتر")
+    .regex(/^[A-Za-z0-9 _-]+$/, "فقط حروف و اعداد انگلیسی مجاز هستند"),
   persian_name: z
     .string()
     .trim()
