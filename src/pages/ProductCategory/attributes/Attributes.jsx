@@ -5,7 +5,7 @@ import {
   deleteAttributesService,
   editAttributesService,
   getAttributesService,
-} from "../../../services/attributes";
+} from "../../../services/attributeService";
 import { useNotification } from "../../../context/notificationContext";
 import DataTable from "../../../components/common/DataTable";
 import InFilter from "./components/InFilter";

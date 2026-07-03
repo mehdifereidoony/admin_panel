@@ -10,6 +10,7 @@ import LoginRoute from "./components/common/LoginRoute";
 import ProtectedRoute from "./components/common/ProtectedRoute";
 import ChildCategories from "./pages/ProductCategory/components/ChildCategories";
 import Attributes from "./pages/ProductCategory/attributes/Attributes";
+import Brands from "./pages/Brands/Brands";
 
 const App = () => {
   return (
@@ -34,6 +35,7 @@ const App = () => {
                 element={<Attributes />}
               />
               <Route path="/products" element={<Products />} />
+              <Route path="/brands" element={<Brands />} />
             </Route>
           </Route>
           <Route path="/*" element={<Navigate to="/" />} />
