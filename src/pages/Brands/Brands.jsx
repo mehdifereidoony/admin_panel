@@ -2,7 +2,10 @@ import { useEffect, useState } from "react";
 import DataTable from "../../components/common/DataTable";
 import ActionsBrands from "./components/ActionsBrand";
 import { useNotification } from "../../context/notificationContext";
-import { getBrandsService } from "../../services/brandService";
+import {
+  deleteBrandsService,
+  getBrandsService,
+} from "../../services/brandService";
 import AddBrand from "./components/AddBrand";
 import BrandsProvider from "../../context/brandsContext";
 
@@ -15,6 +18,22 @@ const Brands = () => {
     { field: "persian_name", title: "نام برند" },
     { field: "descriptions", title: "توضیحات " },
   ];
+  const deleteBrands = async (rowData) => {
+    if (confirm(`آیا از حذف ${rowData.persian_name} اطمینان دارید؟`)) {
+      try {
+        const res = await deleteBrandsService(rowData.id);
+        if (res.status == 200) {
+          addNotification("success", "برند با موفقیت حذف شد");
+          setData((oldData) => [...oldData].filter((d) => d.id !== rowData.id));
+        } else {
+          console.log(res);
+          addNotification("error", "مشکلی پیش آمده");
+        }
+      } catch {
+        addNotification("error", "مشکلی پیش آمده");
+      }
+    }
+  };
   const additionalColumn = [
     {
       title: "لوگو",
@@ -28,7 +47,12 @@ const Brands = () => {
           <p>بدون لوگو</p>
         ),
     },
-    { title: "عملیات", value: (data) => <ActionsBrands data={data} /> },
+    {
+      title: "عملیات",
+      value: (data) => (
+        <ActionsBrands data={data} deleteBrands={deleteBrands} />
+      ),
+    },
   ];
   useEffect(() => {
     const getBrands = async () => {

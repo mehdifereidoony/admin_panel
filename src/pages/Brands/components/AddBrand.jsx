@@ -44,6 +44,7 @@ const AddBrand = ({ setData }) => {
             original_name: res.data.data.original_name,
             persian_name: res.data.data.persian_name,
             descriptions: res.data.data.descriptions,
+            logo: res.data.data.logo,
           },
         ]);
         reset();
@@ -76,7 +77,7 @@ const AddBrand = ({ setData }) => {
       reset({
         original_name: edited.original_name,
         persian_name: edited.persian_name,
-        descriptions: edited.descriptions,
+        descriptions: edited.descriptions || "",
         logo: null,
       });
     }

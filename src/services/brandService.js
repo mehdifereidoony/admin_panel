@@ -31,3 +31,7 @@ export const editBrandsService = (id, data) => {
   }
   return api.post(`/admin/brands/${id}`, data);
 };
+
+export const deleteBrandsService = (id) => {
+  return api.delete(`/admin/brands/${id}`);
+};

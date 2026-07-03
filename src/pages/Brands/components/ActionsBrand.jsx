@@ -1,6 +1,6 @@
 import { useBrands } from "../../../context/brandsContext";
 
-const ActionsBrands = ({ data }) => {
+const ActionsBrands = ({ data, deleteBrands }) => {
   const { setEdited } = useBrands();
   return (
     <>
@@ -14,7 +14,7 @@ const ActionsBrands = ({ data }) => {
         data-bs-target="#add_brand_modal"
       ></i>
       <i
-        onClick={() => console.log(data.id)}
+        onClick={() => deleteBrands(data)}
         className="fas fa-times text-danger mx-1 hoverable_text pointer has_tooltip"
         title="حذف دسته"
         data-bs-toggle="tooltip"
