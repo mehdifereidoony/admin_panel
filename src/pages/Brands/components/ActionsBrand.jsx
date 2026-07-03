@@ -1,14 +1,17 @@
+import { useBrands } from "../../../context/brandsContext";
+
 const ActionsBrands = ({ data }) => {
+  const { setEdited } = useBrands();
   return (
     <>
       <i
-        onClick={() => console.log(data.id)}
+        onClick={() => setEdited(data)}
         id={data.id}
         className="fas fa-edit text-warning mx-1 hoverable_text pointer has_tooltip"
         title="ویرایش دسته"
         data-bs-toggle="modal"
         data-bs-placement="top"
-        data-bs-target="#add_product_category_modal"
+        data-bs-target="#add_brand_modal"
       ></i>
       <i
         onClick={() => console.log(data.id)}

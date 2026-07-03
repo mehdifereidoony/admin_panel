@@ -17,3 +17,17 @@ export const addBrandsService = (data) => {
   }
   return api.post("/admin/brands", data);
 };
+
+export const editBrandsService = (id, data) => {
+  if (data.logo) {
+    const formData = new FormData();
+    formData.append("original_name", data.original_name);
+    formData.append("persian_name", data.persian_name);
+    formData.append("descriptions", data.descriptions);
+    if (data.logo[0]) {
+      formData.append("logo", data.logo[0]);
+    }
+    data = formData;
+  }
+  return api.post(`/admin/brands/${id}`, data);
+};

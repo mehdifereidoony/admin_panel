@@ -5,9 +5,15 @@ import { brandsSchema } from "../../../schema/brandsSchema";
 import FormController from "../../../components/forrms/FormController";
 import SubmitButton from "../../../components/forrms/SubmitButton";
 import { useNotification } from "../../../context/notificationContext";
-import { addBrandsService } from "../../../services/brandService";
+import {
+  addBrandsService,
+  editBrandsService,
+} from "../../../services/brandService";
+import { useBrands } from "../../../context/brandsContext";
+import { useEffect } from "react";
 
 const AddBrand = ({ setData }) => {
+  const { edited, setEdited } = useBrands();
   const addNotification = useNotification();
   const {
     register,
@@ -21,13 +27,16 @@ const AddBrand = ({ setData }) => {
     shouldUnregister: true,
   });
   const onSubmit = async (data) => {
-    console.log(data);
     try {
       let res;
-      res = await addBrandsService(data);
+      if (!edited) {
+        res = await addBrandsService(data);
+      } else {
+        res = await editBrandsService(edited.id, data);
+      }
 
-      if (res.status == 201 || res.status == 200) {
-        addNotification("success", `${"دسته با موفقیت ثبت شد"}`);
+      if (res.status == 201) {
+        addNotification("success", "برند با موفقیت ثبت شد");
         setData((oldData) => [
           ...oldData,
           {
@@ -37,6 +46,15 @@ const AddBrand = ({ setData }) => {
             descriptions: res.data.data.descriptions,
           },
         ]);
+        reset();
+      } else if (res.status == 200) {
+        addNotification("success", "برند باموفقیت ویرایش شد");
+        setData((oldData) => {
+          const data = [...oldData];
+          const index = data.findIndex((d) => d.id == edited.id);
+          data[index] = res.data.data;
+          return data;
+        });
       } else {
         console.log(res);
         addNotification("error", res.data.title || "خطایی رخ داده");
@@ -46,9 +64,27 @@ const AddBrand = ({ setData }) => {
       addNotification("error", "مشکلی از سمت سرور رخ داد");
     }
   };
+  useEffect(() => {
+    if (!edited) {
+      reset({
+        original_name: "",
+        persian_name: "",
+        descriptions: "",
+        logo: null,
+      });
+    } else {
+      reset({
+        original_name: edited.original_name,
+        persian_name: edited.persian_name,
+        descriptions: edited.descriptions,
+        logo: null,
+      });
+    }
+  }, [edited]);
   return (
     <>
       <button
+        onClick={() => setEdited(null)}
         className="btn btn-success d-flex justify-content-center align-items-center"
         data-bs-toggle="modal"
         data-bs-target="#add_brand_modal"
