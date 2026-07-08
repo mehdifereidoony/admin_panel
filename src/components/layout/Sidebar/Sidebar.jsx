@@ -23,8 +23,16 @@ const Sidebar = () => {
             title="مدیریت برندها"
             icon="fas fa-copyright"
           />
-          <MenuItem title="مدیریت گرانتی ها" icon="fab fa-pagelines" />
-          <MenuItem title="مدیریت رنگ ها" icon="fas fa-palette" />
+          <MenuItem
+            to="/warranties"
+            title="مدیریت گارانتی‌ها"
+            icon="fab fa-pagelines"
+          />
+          <MenuItem
+            to="/colors"
+            title="مدیریت رنگ‌ها"
+            icon="fas fa-palette"
+          />
           <MenuItem title="مدیریت تخفیف ها" icon="fas fa-percentage" />
 
           <GroupTitle title="سفارشات و سبد" />
