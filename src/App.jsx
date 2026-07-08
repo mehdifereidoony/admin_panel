@@ -11,6 +11,8 @@ import ProtectedRoute from "./components/common/ProtectedRoute";
 import ChildCategories from "./pages/ProductCategory/components/ChildCategories";
 import Attributes from "./pages/ProductCategory/attributes/Attributes";
 import Brands from "./pages/Brands/Brands";
+import Warranties from "./pages/Warranties/Warranties";
+import Colors from "./pages/Colors/Colors";
 
 const App = () => {
   return (
@@ -36,6 +38,8 @@ const App = () => {
               />
               <Route path="/products" element={<Products />} />
               <Route path="/brands" element={<Brands />} />
+              <Route path="/warranties" element={<Warranties />} />
+              <Route path="/colors" element={<Colors />} />
             </Route>
           </Route>
           <Route path="/*" element={<Navigate to="/" />} />
