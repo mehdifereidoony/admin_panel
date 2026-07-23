@@ -6,6 +6,7 @@ import ActionsProducts from "./components/ActionsProduct";
 import ProductDataTable from "./components/ProductDataTable";
 import ShowProductCategories from "./components/ShowProductCategories";
 import ProductImage from "./components/ProductImage";
+import { Link } from "react-router";
 
 const itemsInTable = [
   { field: "id", title: "#" },
@@ -74,7 +75,12 @@ const Products = () => {
         searchField={searchField}
         breadCount={2}
       >
-        <AddProduct />
+        <Link
+          to="add-product"
+          className="btn btn-success d-flex justify-content-center align-items-center"
+        >
+          <i className="fas fa-plus text-light"></i>
+        </Link>
       </ProductDataTable>
     </div>
   );

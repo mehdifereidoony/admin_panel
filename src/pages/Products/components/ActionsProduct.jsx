@@ -1,11 +1,18 @@
+import { useNavigate } from "react-router";
+
 const ActionsProducts = ({ data }) => {
+  const navigate = useNavigate();
   return (
     <>
       <i
-        onClick={() => console.log(data)}
+        onClick={() =>
+          navigate("edit-product", {
+            state: { data: data },
+          })
+        }
         id={data.id}
         className="fas fa-edit text-warning mx-1 hoverable_text pointer has_tooltip"
-        title="ویرایش دسته"
+        title="ویرایش محصول"
         data-bs-toggle="modal"
         data-bs-placement="top"
         data-bs-target="#add_brand_modal"

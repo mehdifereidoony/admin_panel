@@ -7,3 +7,14 @@ export const getProductsService = (page, count, searchChar) => {
     }${searchChar ? `&searchChar=${searchChar}` : ""}`
   );
 };
+
+export const addProductService = (formData) => {
+  for (const [key, value] of formData.entries()) {
+    console.log(key, value);
+  }
+  return api.post("/admin/products", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+};
