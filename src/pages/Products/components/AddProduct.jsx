@@ -147,6 +147,7 @@ const AddProduct = () => {
   }, [selectedPCategory]);
 
   const onSubmit = async (values) => {
+    console.log(values);
     const formData = new FormData();
 
     formData.append("category_ids", values.category_ids.join("-"));
@@ -286,12 +287,12 @@ const AddProduct = () => {
               className="col-md-6 col-lg-8"
             />
             <FormController
-              control="textarea"
-              label="توضیحات  محصول"
+              control={"editor"}
+              name="descriptions"
+              label="توضیحات "
+              formControl={control}
               error={errors.descriptions?.message}
               className="col-md-6 col-lg-8"
-              {...register("descriptions")}
-              placeholder="توضیحات محصول را وارد کنید"
             />
             <FormController
               control="textarea"
