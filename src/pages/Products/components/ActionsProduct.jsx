@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router";
 
-const ActionsProducts = ({ data }) => {
+const ActionsProducts = ({ data, deleteProduct }) => {
   const navigate = useNavigate();
   return (
     <>
@@ -18,7 +18,7 @@ const ActionsProducts = ({ data }) => {
         data-bs-target="#add_brand_modal"
       ></i>
       <i
-        onClick={() => console.log(data)}
+        onClick={() => deleteProduct(data)}
         className="fas fa-times text-danger mx-1 hoverable_text pointer has_tooltip"
         title="حذف دسته"
         data-bs-toggle="tooltip"

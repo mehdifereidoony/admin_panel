@@ -27,11 +27,44 @@ const AddProduct = () => {
   const isEdit = !!product;
   const addNotification = useNotification();
 
+  const mapProductToForm = (product) => ({
+    category: product.categories?.[0]?.id || "",
+
+    category_ids: product.categories?.map((item) => item.id) || [],
+
+    title: product.title || "",
+
+    price: product.price || "",
+
+    weight: product.weight || "",
+
+    brand_id: product.brand_id || "",
+
+    color_ids: product.colors?.map((item) => item.id) || [],
+
+    guarantee_ids: product.guarantees?.map((item) => item.id) || [],
+
+    descriptions: product.descriptions || "",
+
+    short_descriptions: product.short_descriptions || "",
+
+    cart_descriptions: product.cart_descriptions || "",
+
+    alt_image: product.alt_image || "",
+
+    keywords: product.keywords ? product.keywords.split("-") : [],
+
+    stock: product.stock || "",
+
+    discount: product.discount || "",
+  });
+
   const {
     register,
     control,
     watch,
     handleSubmit,
+    reset,
     formState: { errors, isDirty, isValid, isSubmitting },
   } = useForm({
     mode: "onChange",
@@ -145,53 +178,87 @@ const AddProduct = () => {
     };
     getParentCategories();
   }, [selectedPCategory]);
+  useEffect(() => {
+    if (isEdit && product) {
+      reset(mapProductToForm(product));
+    }
+  }, [product]);
+
+  const prepareUpdateData = (values) => ({
+    title: values.title,
+    price: values.price,
+    weight: values.weight,
+    brand_id: values.brand_id,
+
+    descriptions: values.descriptions,
+    short_descriptions: values.short_descriptions,
+    cart_descriptions: values.cart_descriptions,
+
+    alt_image: values.alt_image,
+
+    keywords: values.keywords.join("-"),
+
+    stock: values.stock,
+    discount: values.discount,
+  });
 
   const onSubmit = async (values) => {
-    console.log(values);
-    const formData = new FormData();
-
-    formData.append("category_ids", values.category_ids.join("-"));
-    formData.append("title", values.title);
-    formData.append("price", values.price);
-
-    if (values.weight) formData.append("weight", values.weight);
-
-    if (values.brand_id) formData.append("brand_id", values.brand_id);
-
-    if (values.color_ids.length)
-      formData.append("color_ids", values.color_ids.join("-"));
-
-    if (values.guarantee_ids.length)
-      formData.append("guarantee_ids", values.guarantee_ids.join("-"));
-
-    if (values.descriptions)
-      formData.append("descriptions", values.descriptions);
-
-    if (values.short_descriptions)
-      formData.append("short_descriptions", values.short_descriptions);
-
-    if (values.cart_descriptions)
-      formData.append("cart_descriptions", values.cart_descriptions);
-
-    if (values.image?.length) formData.append("image", values.image[0]);
-
-    if (values.alt_image) formData.append("alt_image", values.alt_image);
-
-    if (values.keywords.length)
-      formData.append("keywords", values.keywords.join("-"));
-
-    if (values.stock) formData.append("stock", values.stock);
-
-    if (values.discount) formData.append("discount", values.discount);
-
     try {
-      const res = await addProductService(formData);
-      if (res.status == 201) {
-        addNotification("success", "محصول با موفقیت ثبت شد");
+      let res;
+
+      if (isEdit) {
+        const data = prepareUpdateData(values);
+
+        res = await updateProductService(product.id, data);
       } else {
-        addNotification("error", "مشکلی پیش آمده");
+        const formData = new FormData();
+
+        formData.append("category_ids", values.category_ids.join("-"));
+        formData.append("title", values.title);
+        formData.append("price", values.price);
+
+        if (values.weight) formData.append("weight", values.weight);
+
+        if (values.brand_id) formData.append("brand_id", values.brand_id);
+
+        if (values.color_ids.length)
+          formData.append("color_ids", values.color_ids.join("-"));
+
+        if (values.guarantee_ids.length)
+          formData.append("guarantee_ids", values.guarantee_ids.join("-"));
+
+        if (values.descriptions)
+          formData.append("descriptions", values.descriptions);
+
+        if (values.short_descriptions)
+          formData.append("short_descriptions", values.short_descriptions);
+
+        if (values.cart_descriptions)
+          formData.append("cart_descriptions", values.cart_descriptions);
+
+        if (values.image?.length) formData.append("image", values.image[0]);
+
+        if (values.alt_image) formData.append("alt_image", values.alt_image);
+
+        if (values.keywords.length)
+          formData.append("keywords", values.keywords.join("-"));
+
+        if (values.stock) formData.append("stock", values.stock);
+
+        if (values.discount) formData.append("discount", values.discount);
+
+        res = await addProductService(formData);
       }
-    } catch {
+
+      if (res.status === 200 || res.status === 201) {
+        addNotification(
+          "success",
+          isEdit ? "محصول با موفقیت ویرایش شد" : "محصول با موفقیت ثبت شد"
+        );
+      }
+    } catch (error) {
+      console.log(error);
+
       addNotification("error", "مشکلی پیش آمده");
     }
   };
@@ -261,10 +328,10 @@ const AddProduct = () => {
             <FormController
               control="select"
               label="برند محصول"
-              error={errors.brans_id?.message}
+              error={errors.brand_id?.message}
               className="col-md-6 col-lg-8"
               options={brands}
-              {...register("brans_id", {
+              {...register("brand_id", {
                 valueAsNumber: true,
               })}
             />

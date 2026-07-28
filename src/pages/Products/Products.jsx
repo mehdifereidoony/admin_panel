@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from "react";
-import AddProduct from "./components/AddProduct";
-import { getProductsService } from "../../services/productService";
+import {
+  deleteProductService,
+  getProductsService,
+} from "../../services/productService";
 import { useNotification } from "../../context/notificationContext";
 import ActionsProducts from "./components/ActionsProduct";
 import ProductDataTable from "./components/ProductDataTable";
@@ -14,12 +16,8 @@ const itemsInTable = [
   { field: "price", title: "قیمت" },
   { field: "short_descriptions", title: "توضیحات کوتاه" },
 ];
-const additionalColumn = [
-  { title: "دسته ها", value: (data) => <ShowProductCategories data={data} /> },
-  { title: "تصویر", value: (data) => <ProductImage data={data} /> },
-  { title: "عملیات", value: (data) => <ActionsProducts data={data} /> },
-];
-const count = 1;
+
+const count = 4;
 let pageCount = 1;
 
 const Products = () => {
@@ -56,6 +54,34 @@ const Products = () => {
     };
     getProducts();
   }, [currentPage, mainSearch]);
+
+  const deleteProduct = async (rowData) => {
+    if (confirm(`آیا از حذف ${rowData.title} اطمینان دارید؟`)) {
+      try {
+        const res = await deleteProductService(rowData.id);
+        if (res.status == 200) {
+          addNotification("success", `${rowData.title} با موفقیت حذف شد`);
+          setData((oldData) => oldData.filter((d) => d.id !== rowData.id));
+        }
+      } catch {
+        addNotification("error", "مشکلی پیش آمده");
+      }
+    }
+  };
+
+  const additionalColumn = [
+    {
+      title: "دسته ها",
+      value: (data) => <ShowProductCategories data={data} />,
+    },
+    { title: "تصویر", value: (data) => <ProductImage data={data} /> },
+    {
+      title: "عملیات",
+      value: (data) => (
+        <ActionsProducts data={data} deleteProduct={deleteProduct} />
+      ),
+    },
+  ];
 
   return (
     <div

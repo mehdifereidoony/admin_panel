@@ -18,3 +18,11 @@ export const addProductService = (formData) => {
     },
   });
 };
+
+export const updateProductService = (id, data) => {
+  return api.put(`/admin/products/${id}`, data);
+};
+
+export const deleteProductService = (id) => {
+  return api.delete(`/admin/products/${id}`);
+};

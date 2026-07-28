@@ -27,7 +27,7 @@ export const productsSchema = z.object({
     })
     .min(0, "وزن نمی‌تواند منفی باشد"),
 
-  brans_id: z
+  brand_id: z
     .number({
       required_error: "برند را انتخاب کنید",
     })
