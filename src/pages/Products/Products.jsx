@@ -1,108 +1,113 @@
-import DataTable from "../../components/common/DataTable";
-import AddProduct from "./components/AddProduct";
+import { useEffect, useRef, useState } from "react";
+import {
+  deleteProductService,
+  getProductsService,
+} from "../../services/productService";
+import { useNotification } from "../../context/notificationContext";
+import ActionsProducts from "./components/ActionsProduct";
+import ProductDataTable from "./components/ProductDataTable";
+import ShowProductCategories from "./components/ShowProductCategories";
+import ProductImage from "./components/ProductImage";
+import { Link } from "react-router";
 
-const data = [
-  {
-    id: 1,
-    title: "aaa",
-    category: "bbb",
-    status: "test",
-    price: 150_000,
-  },
-  {
-    id: 2,
-    title: "bbb",
-    category: "bbb",
-    status: "test",
-    price: 150_000,
-  },
-  {
-    id: 3,
-    title: "ccc",
-    category: "bbb",
-    status: "test",
-    price: 150_000,
-  },
-  {
-    id: 4,
-    title: "ddd",
-    category: "bbb",
-    status: "test",
-    price: 150_000,
-  },
-  {
-    id: 5,
-    title: "ddd",
-    category: "bbb",
-    status: "test",
-    price: 160_000,
-  },
-  {
-    id: 6,
-    title: "ddd",
-    category: "bbb",
-    status: "test",
-    price: 170_000,
-  },
-];
 const itemsInTable = [
   { field: "id", title: "#" },
-  { field: "category", title: "دسته" },
   { field: "title", title: "نام" },
-  { field: "status", title: "وضعیت" },
   { field: "price", title: "قیمت" },
+  { field: "short_descriptions", title: "توضیحات کوتاه" },
 ];
-const actionsTable = (id) => (
-  <>
-    <i
-      id={id}
-      className="fas fa-project-diagram text-info mx-1 hoverable_text pointer has_tooltip"
-      title="زیرمجموعه"
-      data-bs-toggle="tooltip"
-      data-bs-placement="top"
-    ></i>
-    <i
-      id={id}
-      className="fas fa-edit text-warning mx-1 hoverable_text pointer has_tooltip"
-      title="ویرایش دسته"
-      data-bs-toggle="modal"
-      data-bs-placement="top"
-      data-bs-target="#add_product_category_modal"
-    ></i>
-    <i
-      id={id}
-      className="fas fa-plus text-success mx-1 hoverable_text pointer has_tooltip"
-      title="افزودن ویژگی"
-      data-bs-toggle="modal"
-      data-bs-target="#add_product_category_attr_modal"
-    ></i>
-    <i
-      id={id}
-      className="fas fa-times text-danger mx-1 hoverable_text pointer has_tooltip"
-      title="حذف دسته"
-      data-bs-toggle="tooltip"
-      data-bs-placement="top"
-    ></i>
-  </>
-);
-const additionalColumn = { title: "عملیات", value: (id) => actionsTable(id) };
+
+const count = 4;
+let pageCount = 1;
 
 const Products = () => {
+  const [data, setData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [searchField, setSearchField] = useState("");
+  const [mainSearch, setMainSearch] = useState("");
+  const addNotification = useNotification();
+
+  const timeoutRef = useRef(null);
+
+  useEffect(() => {
+    clearTimeout(timeoutRef.current);
+    timeoutRef.current = setTimeout(() => {
+      setMainSearch(searchField);
+    }, 1000);
+  }, [searchField]);
+
+  useEffect(() => {
+    const getProducts = async () => {
+      setIsLoading(true);
+      try {
+        const res = await getProductsService(currentPage, count, mainSearch);
+        if (res.status == 200) {
+          setData(res.data.data);
+          pageCount = res.data.last_page;
+        }
+      } catch {
+        addNotification("error", "خطایی رخ داده");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    getProducts();
+  }, [currentPage, mainSearch]);
+
+  const deleteProduct = async (rowData) => {
+    if (confirm(`آیا از حذف ${rowData.title} اطمینان دارید؟`)) {
+      try {
+        const res = await deleteProductService(rowData.id);
+        if (res.status == 200) {
+          addNotification("success", `${rowData.title} با موفقیت حذف شد`);
+          setData((oldData) => oldData.filter((d) => d.id !== rowData.id));
+        }
+      } catch {
+        addNotification("error", "مشکلی پیش آمده");
+      }
+    }
+  };
+
+  const additionalColumn = [
+    {
+      title: "دسته ها",
+      value: (data) => <ShowProductCategories data={data} />,
+    },
+    { title: "تصویر", value: (data) => <ProductImage data={data} /> },
+    {
+      title: "عملیات",
+      value: (data) => (
+        <ActionsProducts data={data} deleteProduct={deleteProduct} />
+      ),
+    },
+  ];
+
   return (
     <div
       id="manage_product_section"
       className="manage_product_section main_section"
     >
       <h4 className="text-center my-3">مدیریت محصولات</h4>
-      <DataTable
+      <ProductDataTable
         data={data}
+        isLoading={isLoading}
         itemsInTable={itemsInTable}
         additionalColumn={additionalColumn}
-        itemsInPage={5}
-        searchField={["title"]}
+        pageCount={pageCount}
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+        setSearchField={setSearchField}
+        searchField={searchField}
+        breadCount={2}
       >
-        <AddProduct />
-      </DataTable>
+        <Link
+          to="add-product"
+          className="btn btn-success d-flex justify-content-center align-items-center"
+        >
+          <i className="fas fa-plus text-light"></i>
+        </Link>
+      </ProductDataTable>
     </div>
   );
 };

@@ -13,6 +13,7 @@ import Attributes from "./pages/ProductCategory/attributes/Attributes";
 import Brands from "./pages/Brands/Brands";
 import Warranties from "./pages/Warranties/Warranties";
 import Colors from "./pages/Colors/Colors";
+import AddProduct from "./pages/Products/components/AddProduct";
 
 const App = () => {
   return (
@@ -37,6 +38,8 @@ const App = () => {
                 element={<Attributes />}
               />
               <Route path="/products" element={<Products />} />
+              <Route path="/products/add-product" element={<AddProduct />} />
+              <Route path="/products/edit-product" element={<AddProduct />} />
               <Route path="/brands" element={<Brands />} />
               <Route path="/warranties" element={<Warranties />} />
               <Route path="/colors" element={<Colors />} />
