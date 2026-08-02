@@ -3,6 +3,7 @@ import DataTable from "../../components/common/DataTable";
 import ActionsDiscount from "./components/ActionsDiscount";
 import { getDiscountsService } from "../../services/discountService";
 import { useNotification } from "../../context/notificationContext";
+import { Link, Outlet } from "react-router";
 
 const Discounts = () => {
   const [data, setData] = useState([]);
@@ -54,7 +55,15 @@ const Discounts = () => {
         itemsInPage={12}
         searchField={["title", "code"]}
         isLoading={isLoading}
-      ></DataTable>
+      >
+        <Link
+          to="add-discount"
+          className="btn btn-success d-flex justify-content-center align-items-center"
+        >
+          <i className="fas fa-plus text-light"></i>
+        </Link>
+        <Outlet />
+      </DataTable>
     </div>
   );
 };
