@@ -1,7 +1,7 @@
-const Checkbox = ({ label, error, id, ...props }) => {
+const Checkbox = ({ label, error, id, miniBox, ...props }) => {
   return (
     <>
-      <div className="form-check form-switch col-5 col-md-2">
+      <div className={`form-check form-switch col-5  ${miniBox? "": "col-md-2"}`}>
         <input
           className="form-check-input pointer"
           type="checkbox"

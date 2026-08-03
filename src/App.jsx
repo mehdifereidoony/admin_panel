@@ -16,6 +16,7 @@ import Colors from "./pages/Colors/Colors";
 import AddProduct from "./pages/Products/components/AddProduct";
 import Discounts from "./pages/Discounts/Discounts";
 import AddDiscount from "./pages/Discounts/components/AddDiscount";
+import Permissions from "./pages/Permissions/Permissions";
 
 const App = () => {
   return (

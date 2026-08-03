@@ -17,7 +17,7 @@ const CustomDatePicker = ({
   return (
     <>
       <div className={`col-12 mb-3 ${className}`}>
-        <div className="input-group" style={{ direction: "ltr" }}>
+        <div className="input-group" style={{ direction: "ltr" , justifyContent: "flex-end" }}>
           <Controller
             name={name}
             control={formControl}
@@ -31,19 +31,20 @@ const CustomDatePicker = ({
                 minDate={minDate}
                 maxDate={maxDate}
                 onChange={(date) => {
-                  if (!date) {
-                    field.onChange(null);
-                    return;
-                  }
 
-                  const gregorian = date.convert("gregorian");
 
-                  const year = gregorian.year;
-                  const month = String(gregorian.month.number).padStart(2, "0");
-                  const day = String(gregorian.day).padStart(2, "0");
+                    const gregorian = date.convert("gregorian");
 
-                  field.onChange(`${year}-${month}-${day}`);
-                }}
+
+                    const year = gregorian.year;
+                    const month = String(gregorian.month.number).padStart(2, "0");
+                    const day = String(gregorian.day).padStart(2, "0");
+
+                    const result = `${year}-${month}-${day}`;
+
+
+                    field.onChange(result);
+                    }}
               />
             )}
           />
