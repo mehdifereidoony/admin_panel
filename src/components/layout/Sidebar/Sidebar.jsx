@@ -28,12 +28,12 @@ const Sidebar = () => {
             title="مدیریت گارانتی‌ها"
             icon="fab fa-pagelines"
           />
+          <MenuItem to="/colors" title="مدیریت رنگ‌ها" icon="fas fa-palette" />
           <MenuItem
-            to="/colors"
-            title="مدیریت رنگ‌ها"
-            icon="fas fa-palette"
+            to="/discounts"
+            title="مدیریت تخفیف ها"
+            icon="fas fa-percentage"
           />
-          <MenuItem title="مدیریت تخفیف ها" icon="fas fa-percentage" />
 
           <GroupTitle title="سفارشات و سبد" />
           <MenuItem title="مدیریت سبدها" icon="fas fa-shopping-basket" />

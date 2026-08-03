@@ -1,4 +1,5 @@
 import Checkbox from "./Checkbox";
+import CustomDatePicker from "./DatePicker";
 import FileField from "./FileField";
 import Input from "./Input";
 import MultiSelect from "./MultiSelect";
@@ -25,6 +26,8 @@ const FormController = ({ control, ...props }) => {
       return <TagInput {...props} />;
     case "editor":
       return <RichTextEditor {...props} />;
+    case "date":
+      return <CustomDatePicker {...props} />;
     default:
       return <Input {...props} />;
   }
