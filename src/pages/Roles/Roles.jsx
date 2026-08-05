@@ -78,7 +78,16 @@ const Roles = () => {
         itemsInPage={12}
         searchField={["title", "description"]}
         isLoading={isLoading}
-      ></DataTable>
+      >
+        <Link
+          to="add-role"
+          className="btn btn-success d-flex justify-content-center align-items-center"
+        >
+          <i className="fas fa-plus text-light"></i>
+        </Link>
+
+        <Outlet context={{ setData }} />
+      </DataTable>
     </div>
   );
 };

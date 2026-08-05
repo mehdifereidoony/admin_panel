@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
 import DataTable from "../../components/common/DataTable";
 import ActionsDiscount from "./components/ActionsDiscount";
-import { deleteDiscountsService, getDiscountsService } from "../../services/discountService";
+import {
+  deleteDiscountsService,
+  getDiscountsService,
+} from "../../services/discountService";
 import { useNotification } from "../../context/notificationContext";
 import { Link, Outlet } from "react-router";
 
@@ -10,23 +13,22 @@ const Discounts = () => {
   const [isLoading, setIsLoading] = useState(false);
   const addNotification = useNotification();
 
-  const deleteDiscount = async(rowData)=>{
-    if(confirm(`آیا از حذف ${rowData.title} اطمینان دارید؟`)){
-      try{
-      const res = await deleteDiscountsService(rowData.id);
-      if(res.status == 200){
-        addNotification("success", `${rowData.title} با موفقیت حذف شد`)
-        setData((oldData)=> oldData.filter(d=> d.id !== rowData.id))
+  const deleteDiscount = async (rowData) => {
+    if (confirm(`آیا از حذف ${rowData.title} اطمینان دارید؟`)) {
+      try {
+        const res = await deleteDiscountsService(rowData.id);
+        if (res.status == 200) {
+          addNotification("success", `${rowData.title} با موفقیت حذف شد`);
+          setData((oldData) => oldData.filter((d) => d.id !== rowData.id));
+        } else {
+          console.log(res);
+        }
+      } catch (error) {
+        addNotification("error", "خطایی رخ داده");
+        console.log(error);
       }
-      else{
-        console.log(res)
-      }
-    }catch(error){
-      addNotification("error" , "خطایی رخ داده")
-      console.log(error)
     }
-    }
-  }
+  };
 
   const itemsInTable = [
     { field: "id", title: "#" },
@@ -41,7 +43,9 @@ const Discounts = () => {
     },
     {
       title: "عملیات",
-      value: (row) => <ActionsDiscount data={row} deleteDiscount={deleteDiscount} />,
+      value: (row) => (
+        <ActionsDiscount data={row} deleteDiscount={deleteDiscount} />
+      ),
     },
   ];
 
@@ -55,7 +59,7 @@ const Discounts = () => {
         }
       } catch {
         addNotification("error", "خطایی رخ داده");
-      }finally{
+      } finally {
         setIsLoading(false);
       }
     };
@@ -82,7 +86,7 @@ const Discounts = () => {
         >
           <i className="fas fa-plus text-light"></i>
         </Link>
-        <Outlet context={{setData}} />
+        <Outlet context={{ setData }} />
       </DataTable>
     </div>
   );

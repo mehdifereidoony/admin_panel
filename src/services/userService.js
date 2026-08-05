@@ -8,6 +8,10 @@ export const getRolesService = () => {
   return api.get("/admin/roles");
 };
 
+export const createRolesService = (data) => {
+  return api.post("/admin/roles", data);
+};
+
 export const deleteRolesService = (id) => {
-  return api.delete(`/admin/roles${id}`);
+  return api.delete(`/admin/roles/${id}`);
 };
