@@ -42,7 +42,7 @@ const Sidebar = () => {
 
           <GroupTitle title="کاربران و همکاران" />
           <MenuItem title="مشاهده کاربران" icon="fas fa-users" />
-          <MenuItem title="نقش ها" icon="fas fa-user-tag" />
+          <MenuItem to="/roles" title="نقش ها" icon="fas fa-user-tag" />
           <MenuItem
             to="/permissions"
             title="مجوز ها"

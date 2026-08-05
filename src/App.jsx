@@ -17,6 +17,7 @@ import AddProduct from "./pages/Products/components/AddProduct";
 import Discounts from "./pages/Discounts/Discounts";
 import AddDiscount from "./pages/Discounts/components/AddDiscount";
 import Permissions from "./pages/Permissions/Permissions";
+import Roles from "./pages/Roles/Roles";
 
 const App = () => {
   return (
@@ -49,6 +50,7 @@ const App = () => {
               <Route path="/discounts" element={<Discounts />}>
                 <Route path="add-discount" element={<AddDiscount />} />
               </Route>
+              <Route path="/roles" element={<Roles />} />
               <Route path="/permissions" element={<Permissions />} />
             </Route>
           </Route>
