@@ -43,7 +43,11 @@ const Sidebar = () => {
           <GroupTitle title="کاربران و همکاران" />
           <MenuItem title="مشاهده کاربران" icon="fas fa-users" />
           <MenuItem title="نقش ها" icon="fas fa-user-tag" />
-          <MenuItem title="مجوز ها" icon="fas fa-shield-alt" />
+          <MenuItem
+            to="/permissions"
+            title="مجوز ها"
+            icon="fas fa-shield-alt"
+          />
 
           <GroupTitle title="ارتباطات" />
           <MenuItem title="سوال ها" icon="fas fa-question-circle" />

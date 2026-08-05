@@ -49,6 +49,7 @@ const App = () => {
               <Route path="/discounts" element={<Discounts />}>
                 <Route path="add-discount" element={<AddDiscount />} />
               </Route>
+              <Route path="/permissions" element={<Permissions />} />
             </Route>
           </Route>
           <Route path="/*" element={<Navigate to="/" />} />

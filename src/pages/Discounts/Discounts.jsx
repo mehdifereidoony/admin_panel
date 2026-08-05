@@ -50,12 +50,13 @@ const Discounts = () => {
       try {
         setIsLoading(true);
         const res = await getDiscountsService();
-        setIsLoading(false);
         if (res.status == 200) {
           setData(res.data.data);
         }
       } catch {
         addNotification("error", "خطایی رخ داده");
+      }finally{
+        setIsLoading(false);
       }
     };
     getDiscounts();
