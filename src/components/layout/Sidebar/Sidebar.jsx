@@ -41,7 +41,7 @@ const Sidebar = () => {
           <MenuItem title="مدیریت نحوه ارسال" icon="fas fa-truck-loading" />
 
           <GroupTitle title="کاربران و همکاران" />
-          <MenuItem title="مشاهده کاربران" icon="fas fa-users" />
+          <MenuItem to="/user" title="مشاهده کاربران" icon="fas fa-users" />
           <MenuItem to="/roles" title="نقش ها" icon="fas fa-user-tag" />
           <MenuItem
             to="/permissions"

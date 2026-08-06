@@ -19,6 +19,8 @@ import AddDiscount from "./pages/Discounts/components/AddDiscount";
 import Permissions from "./pages/Permissions/Permissions";
 import Roles from "./pages/Roles/Roles";
 import AddRole from "./pages/Roles/components/AddRole";
+import Users from "./pages/Users/Users";
+import AddUser from "./pages/Users/components/AddUser";
 
 const App = () => {
   return (
@@ -50,6 +52,9 @@ const App = () => {
               <Route path="/colors" element={<Colors />} />
               <Route path="/discounts" element={<Discounts />}>
                 <Route path="add-discount" element={<AddDiscount />} />
+              </Route>
+              <Route path="/user" element={<Users />}>
+                <Route path="add-user" element={<AddUser />} />
               </Route>
               <Route path="/roles" element={<Roles />}>
                 <Route path="add-role" element={<AddRole />} />
