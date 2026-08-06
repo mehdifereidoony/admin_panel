@@ -12,6 +12,14 @@ export const createRolesService = (data) => {
   return api.post("/admin/roles", data);
 };
 
+export const updateRoleService = (id , data) => {
+  return api.put(`/admin/roles/${id}`, data);
+};
+
+export const updateRolePermissionsService = (id , data) => {
+  return api.put(`/admin/roles/${id}/permissions`, data);
+};
+
 export const deleteRolesService = (id) => {
   return api.delete(`/admin/roles/${id}`);
 };

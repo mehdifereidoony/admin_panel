@@ -8,20 +8,32 @@ import { useEffect, useState } from "react";
 import {
   createRolesService,
   getPermissionsService,
+  updateRolePermissionsService,
+  updateRoleService,
 } from "../../../services/userService";
 import { useNotification } from "../../../context/notificationContext";
-import { useOutletContext } from "react-router";
+import { useLocation, useOutletContext } from "react-router";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { roleSchema } from "../../../schema/roleSchema";
 
 const AddRole = () => {
   const [permissions, setPermissions] = useState([]);
   const addNotification = useNotification();
   const { setData } = useOutletContext();
+  const location = useLocation();
+  const currentRole = location.state?.data;
   const {
     register,
     control,
+    reset,
     handleSubmit,
     formState: { errors, isDirty, isValid, isSubmitting },
-  } = useForm({});
+  } = useForm({
+    mode: "onChange",
+    resolver: zodResolver(roleSchema),
+    shouldFocusError: true,
+    shouldUnregister: true,
+  });
 
   useEffect(() => {
     const getRoles = async () => {
@@ -40,14 +52,53 @@ const AddRole = () => {
     getRoles();
   }, []);
 
+  useEffect(() => {
+    if (currentRole) {
+      const updateData = {
+        ...currentRole,
+        permissions_id: currentRole.permissions.map((p) => p.id),
+      };
+      reset(updateData);
+    }
+  }, [currentRole]);
+
   const onSubmit = async (formData) => {
     try {
-      const res = await createRolesService(formData);
-      if (res.status == 201) {
-        addNotification("success", "نقش جدید با موفقیت اضاف شد");
-        setData((oldData) => [...oldData, res.data.data]);
+      if (!currentRole) {
+        const res = await createRolesService(formData);
+        if (res.status == 201) {
+          addNotification("success", "نقش جدید با موفقیت اضاف شد");
+          setData((oldData) => [...oldData, res.data.data]);
+        } else {
+          addNotification("error", "مکشلی پیش آمده");
+        }
       } else {
-        addNotification("error", "مکشلی پیش آمده");
+        const roleData = {
+          title: formData.title,
+          description: formData.description,
+        };
+        const permissionsData = { permissions_id: formData.permissions_id };
+        const roleRequest = await updateRoleService(currentRole.id, roleData);
+        if (roleRequest.status == 200) {
+          const permissionRequest = await updateRolePermissionsService(
+            currentRole.id,
+            permissionsData,
+          );
+          if (permissionRequest.status == 200) {
+            addNotification("success", "دسته با موفقیت ویرایش شد");
+            setData((oldData) =>
+              oldData.map((o) => {
+                if (o.id == currentRole.id) {
+                  return permissionRequest.data.data;
+                } else {
+                  return o;
+                }
+              }),
+            );
+            return;
+          }
+        }
+        addNotification("error", "مشکلی پیش آمده");
       }
     } catch {
       addNotification("error", "مکشلی پیش آمده");
@@ -56,7 +107,12 @@ const AddRole = () => {
 
   return (
     <>
-      <Modal title="" fullScreen={true} id="add_role_modal" isOpen={true}>
+      <Modal
+        title={`${currentRole ? "ویرایش نقش" : "افزودن نقش"}`}
+        fullScreen={true}
+        id="add_role_modal"
+        isOpen={true}
+      >
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="container">
             <div className="row justifyContent-center">

@@ -1,8 +1,15 @@
+import { useNavigate } from "react-router";
+
 const ActionsDiscount = ({ data, deleteRole }) => {
+  const navigate = useNavigate();
   return (
     <>
       <i
-        onClick={() => console.log(data.id)}
+        onClick={() =>
+          navigate("add-role", {
+            state: { data },
+          })
+        }
         id={data.id}
         className="fas fa-edit text-warning mx-1 hoverable_text pointer has_tooltip"
         title="ویرایش رول"
