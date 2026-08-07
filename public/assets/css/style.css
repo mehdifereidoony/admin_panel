@@ -475,3 +475,7 @@ th {
 .add-edit-attr {
   padding: 15px;
 }
+
+.permissions-check .form-check{
+  width: max-content;
+}

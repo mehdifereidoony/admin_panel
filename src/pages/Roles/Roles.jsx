@@ -1,95 +1,95 @@
 import { useEffect, useState } from "react";
-import DataTable from "../../components/common/DataTable";
-import ActionsDiscount from "./components/ActionsDiscount";
-import {
-  deleteDiscountsService,
-  getDiscountsService,
-} from "../../services/discountService";
-import { useNotification } from "../../context/notificationContext";
 import { Link, Outlet } from "react-router";
+import DataTable from "../../components/common/DataTable";
+import ActionsRole from "./components/ActionsRole";
+import {
+  getRolesService,
+  deleteRolesService,
+} from "../../services/userService";
+import { useNotification } from "../../context/notificationContext";
 
-const Discounts = () => {
+const Roles = () => {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+
   const addNotification = useNotification();
 
-  const deleteDiscount = async (rowData) => {
+  const deleteRole = async (rowData) => {
     if (confirm(`آیا از حذف ${rowData.title} اطمینان دارید؟`)) {
       try {
-        const res = await deleteDiscountsService(rowData.id);
-        if (res.status == 200) {
+        const res = await deleteRolesService(rowData.id);
+
+        if (res.status === 200) {
           addNotification("success", `${rowData.title} با موفقیت حذف شد`);
-          setData((oldData) => oldData.filter((d) => d.id !== rowData.id));
-        } else {
-          console.log(res);
+
+          setData((oldData) =>
+            oldData.filter((role) => role.id !== rowData.id),
+          );
         }
       } catch (error) {
-        addNotification("error", "خطایی رخ داده");
         console.log(error);
+        addNotification("error", "خطایی رخ داده");
       }
     }
   };
 
   const itemsInTable = [
     { field: "id", title: "#" },
-    { field: "title", title: "عنوان" },
-    { field: "code", title: "کد تخفیف" },
-    { field: "percent", title: "درصد تخفیف " },
+    { field: "title", title: "عنوان نقش" },
+    { field: "description", title: "توضیحات" },
   ];
+
   const additionalColumn = [
     {
-      title: "فعال",
-      value: (row) => <span>{row.is_active ? "هست" : "نیست"}</span>,
-    },
-    {
       title: "عملیات",
-      value: (row) => (
-        <ActionsDiscount data={row} deleteDiscount={deleteDiscount} />
-      ),
+      value: (row) => <ActionsRole data={row} deleteRole={deleteRole} />,
     },
   ];
 
   useEffect(() => {
-    const getDiscounts = async () => {
+    const getRoles = async () => {
       try {
         setIsLoading(true);
-        const res = await getDiscountsService();
-        if (res.status == 200) {
+
+        const res = await getRolesService();
+
+        if (res.status === 200) {
           setData(res.data.data);
         }
-      } catch {
+      } catch (error) {
+        console.log(error);
         addNotification("error", "خطایی رخ داده");
       } finally {
         setIsLoading(false);
       }
     };
-    getDiscounts();
+
+    getRoles();
   }, []);
+
   return (
-    <div
-      id="manage_color_section"
-      className="manage_color_section main_section"
-    >
-      <h4 className="text-center my-3">مدیریت تخفیف ها</h4>
+    <div id="manage_role_section" className="manage_role_section main_section">
+      <h4 className="text-center my-3">مدیریت نقش‌ها</h4>
 
       <DataTable
         data={data}
         itemsInTable={itemsInTable}
         additionalColumn={additionalColumn}
         itemsInPage={12}
-        searchField={["title", "code"]}
+        searchField={["title", "description"]}
         isLoading={isLoading}
       >
         <Link
-          to="add-discount"
+          to="add-role"
           className="btn btn-success d-flex justify-content-center align-items-center"
         >
           <i className="fas fa-plus text-light"></i>
         </Link>
+
         <Outlet context={{ setData }} />
       </DataTable>
     </div>
   );
 };
 
-export default Discounts;
+export default Roles;
