@@ -3,9 +3,12 @@ import Switch from "./Switch";
 import Logo from "./Logo";
 import { useNavigate } from "react-router";
 import { removeToken } from "../../../utils/authToken";
+import { useDispatch } from "react-redux";
+import { clearUser } from "../../../store/slices/userSlice";
 
 const Header = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   useEffect(() => {
     document
       .getElementById("handle_toggle_sidemenu")
@@ -23,12 +26,11 @@ const Header = () => {
         }
       });
   }, []);
-  const handleLogout = ()=>{
-    
+  const handleLogout = () => {
     removeToken();
-    navigate("/login")
-
-}
+    dispatch(clearUser());
+    navigate("/login");
+  };
   return (
     <nav className="navbar fixed-top navbar-dark bg-secondary top_navbar py-0">
       <div className="container-fluid h-100 pe-0">

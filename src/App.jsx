@@ -21,9 +21,17 @@ import Roles from "./pages/Roles/Roles";
 import AddRole from "./pages/Roles/components/AddRole";
 import Users from "./pages/Users/Users";
 import AddUser from "./pages/Users/components/AddUser";
-
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { getCurrentUser } from "./store/slices/userSlice";
 
 const App = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getCurrentUser());
+  }, [dispatch]);
+
   return (
     <NotificationProvider>
       <BrowserRouter>
