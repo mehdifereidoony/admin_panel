@@ -3,15 +3,23 @@ import { getCurrentUserService } from "../../services/authService";
 
 export const getCurrentUser = createAsyncThunk(
   "user/getCurrentUser",
-  async () => {
-    const res = await getCurrentUserService();
-    return res.data;
+  async (_, { rejectWithValue }) => {
+    try {
+      const res = await getCurrentUserService();
+      return res.data;
+    } catch (error) {
+      const status = error.response?.status;
+      const data = error.response?.data;
+      return rejectWithValue({ status, data });
+    }
   }
 );
 
 const initialState = {
   data: null,
   isLoading: true,
+  error: null,
+  authStatus: "checking"
 };
 
 const userSlice = createSlice({
@@ -20,9 +28,13 @@ const userSlice = createSlice({
   reducers: {
     setUser: (state, action) => {
       state.data = action.payload;
+      state.authStatus = "authenticated";
+      state.error = null;
     },
     clearUser: (state) => {
       state.data = null;
+      state.error = null;
+      state.authStatus = "unauthenticated";
     },
     setLoading: (state, action) => {
       state.isLoading = action.payload;
@@ -31,14 +43,30 @@ const userSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(getCurrentUser.pending, (state) => {
       state.isLoading = true;
+      state.error = null;
+      state.authStatus = "checking";
     });
+
     builder.addCase(getCurrentUser.fulfilled, (state, action) => {
       state.data = action.payload;
       state.isLoading = false;
+      state.error = null;
+      state.authStatus = "authenticated";
     });
-    builder.addCase(getCurrentUser.rejected, (state) => {
-      state.data = null;
+
+    builder.addCase(getCurrentUser.rejected, (state, action) => {
+      const status = action.payload?.status;
+
       state.isLoading = false;
+
+      if (status === 401) {
+        state.data = null;
+        state.error = null;
+        state.authStatus = "unauthenticated";
+      } else {
+        state.error = action.payload;
+        state.authStatus = "unknown";
+      }
     });
   },
 });

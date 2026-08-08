@@ -24,9 +24,11 @@ import AddUser from "./pages/Users/components/AddUser";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { getCurrentUser } from "./store/slices/userSlice";
+import { usePermission } from "./hooks/usePermission";
 
 const App = () => {
   const dispatch = useDispatch();
+  const { can } = usePermission();
 
   useEffect(() => {
     dispatch(getCurrentUser());
@@ -46,29 +48,70 @@ const App = () => {
           <Route element={<ProtectedRoute />}>
             <Route element={<AdminLayout />}>
               <Route path="/" element={<Dashboard />} />
-              <Route path="/categories" element={<ProductCategory />}>
-                <Route path=":parentId" element={<ChildCategories />} />
-              </Route>
-              <Route
-                path="/categories/:categoryId/attributes"
-                element={<Attributes />}
-              />
-              <Route path="/products" element={<Products />} />
-              <Route path="/products/add-product" element={<AddProduct />} />
-              <Route path="/products/edit-product" element={<AddProduct />} />
-              <Route path="/brands" element={<Brands />} />
-              <Route path="/warranties" element={<Warranties />} />
-              <Route path="/colors" element={<Colors />} />
-              <Route path="/discounts" element={<Discounts />}>
-                <Route path="add-discount" element={<AddDiscount />} />
-              </Route>
-              <Route path="/user" element={<Users />}>
-                <Route path="add-user" element={<AddUser />} />
-              </Route>
-              <Route path="/roles" element={<Roles />}>
-                <Route path="add-role" element={<AddRole />} />
-              </Route>
-              <Route path="/permissions" element={<Permissions />} />
+              {can("read_categories") && (
+                <Route path="/categories" element={<ProductCategory />}>
+                  <Route path=":parentId" element={<ChildCategories />} />
+                </Route>
+              )}
+
+              {can("read_category_attrs") && (
+                <Route
+                  path="/categories/:categoryId/attributes"
+                  element={<Attributes />}
+                />
+              )}
+
+              {can("read_products") && (
+                <Route path="/products" element={<Products />} />
+              )}
+
+              {can("create_product") && (
+                <Route path="/products/add-product" element={<AddProduct />} />
+              )}
+
+              {can("read_brands") && (
+                <Route path="/brands" element={<Brands />} />
+              )}
+
+              {can("read_guarantees") && (
+                <Route path="/warranties" element={<Warranties />} />
+              )}
+
+              {can("read_colors") && (
+                <Route path="/colors" element={<Colors />} />
+              )}
+
+              {can("read_discounts") && (
+                <Route path="/discounts" element={<Discounts />}>
+                  {can("create_discount") && (
+                    <Route path="add-discount" element={<AddDiscount />} />
+                  )}
+                </Route>
+              )}
+
+              {can("read_users") && (
+                <Route path="/user">
+                  <Route index element={<Users />} />
+
+                  {can("create_user") && (
+                    <Route path="add-user" element={<AddUser />} />
+                  )}
+                </Route>
+              )}
+
+              {can("read_roles") && (
+                <Route path="/roles">
+                  <Route index element={<Roles />} />
+
+                  {can("create_role") && (
+                    <Route path="add-role" element={<AddRole />} />
+                  )}
+                </Route>
+              )}
+
+              {can("read_permissions") && (
+                <Route path="/permissions" element={<Permissions />} />
+              )}
             </Route>
           </Route>
           <Route path="/*" element={<Navigate to="/" />} />
