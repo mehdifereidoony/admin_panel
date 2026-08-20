@@ -467,3 +467,15 @@ th {
     opacity: 1;
   }
 }
+
+.bg-active {
+  background-color: #3186e86d;
+}
+
+.add-edit-attr {
+  padding: 15px;
+}
+
+.permissions-check .form-check{
+  width: max-content;
+}

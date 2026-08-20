@@ -5,10 +5,13 @@ import { loginApi } from "../../services/authService";
 import { useNavigate } from "react-router";
 import { useNotification } from "../../context/notificationContext";
 import { setToken } from "../../utils/authToken";
+import { useDispatch } from "react-redux";
+import { getCurrentUser } from "../../store/slices/userSlice";
 
 const Login = () => {
   const addNotification = useNotification();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const {
     register,
     handleSubmit,
@@ -23,13 +26,14 @@ const Login = () => {
     try {
       const res = await loginApi(data);
       if (res.status == 200) {
-        setToken(res.data.token)
+        setToken(res.data.token);
+        dispatch(getCurrentUser());
         navigate("/");
       } else {
-        addNotification("اطلاعات وارد شده نامعتبر است", "error");
+        addNotification("error", "اطلاعات وارد شده نامعتبر است");
       }
     } catch {
-      addNotification("مشکلی پیش آمده", "error");
+      addNotification("error", "مشکلی پیش آمده");
     }
   };
   return (

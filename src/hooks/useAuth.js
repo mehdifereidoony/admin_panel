@@ -1,31 +1,26 @@
-import { useEffect, useState } from "react"
-import { checkTokenValidity } from "../services/authService";
-import { getToken, removeToken } from "../utils/authToken";
+import { useSelector } from "react-redux";
 
-export const useAuth = ()=>{
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const [isLoading, setIsLoading] = useState(true);
-    useEffect(()=>{
-        const verifyAuth = async()=>{
-            const token = getToken();
-            if(!token){
-                setIsAuthenticated(false);
-                setIsLoading(false);
-                return;
-            }
-             try{
-                const checkToken = await checkTokenValidity();
-                const isValid = checkToken.status == 200 ? true : false;
-                setIsAuthenticated(isValid)
-             }catch(error){
-                setIsAuthenticated(false);
-                removeToken()
-             }finally{
-                setIsLoading(false)
-             }
-        }
-        verifyAuth()
+export const useAuth = () => {
+  const {
+    data: user,
+    isLoading,
+    error,
+    authStatus,
+  } = useSelector((state) => state.user);
 
-    },[])
-    return {isLoading, isAuthenticated}
-}
+  const isAuthenticated = authStatus === "authenticated";
+
+  console.log(`
+    user:${user} \n
+    isLoading:${isLoading} \n
+    error:${error} \n
+    authStatus:${authStatus} \n`)
+
+  return {
+    user,
+    isLoading,
+    error,
+    authStatus,
+    isAuthenticated,
+  };
+};
